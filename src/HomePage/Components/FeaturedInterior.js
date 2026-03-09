@@ -1,4 +1,3 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 const cards = [
@@ -123,14 +122,6 @@ export default function FeaturedMarquee() {
     return () => cancelAnimationFrame(animationFrame);
   }, [isPaused]);
 
-  const moveLeft = () => {
-    setPosition((prev) => prev + 300);
-  };
-
-  const moveRight = () => {
-    setPosition((prev) => prev - 300);
-  };
-
   // Detect screen size
   useEffect(() => {
     const updateLayout = () => {
@@ -157,27 +148,12 @@ export default function FeaturedMarquee() {
   const allVisible = visibleCount >= cards.length;
 
   return (
-    <section className="w-full py-[8%] lg:py-[4%] bg-[#F6F6F6] overflow-hidden">
+    <section className="w-full py-[8%] lg:py-[4%] bg-[var(--primary)] overflow-hidden">
       {/* Header */}
       <div className="lg:flex justify-between items-center px-4 lg:px-10 mb-[8%] lg:mb-[2.5%]">
         <h2 className="text-[clamp(20px,6vw,120px)] lg:text-[clamp(20px,4.2vw,120px)] py-[1%] text-center capitalize leading-tight font-medium font-[Poppins]">
           Featured Interior Inspiration
         </h2>
-
-        <div className="hidden lg:flex gap-4">
-          <div
-            onClick={moveLeft}
-            className="w-10 h-10 sm:w-16 sm:h-16 rounded-full border border-[#B7B7B7] bg-white flex items-center justify-center hover:bg-black hover:text-white transition-all ease-in duration-300 cursor-pointer"
-          >
-            <ChevronLeft className="w-5 h-5 sm:w-8 sm:h-8 stroke-1" />
-          </div>
-          <div
-            onClick={moveRight}
-            className="w-10 h-10 sm:w-16 sm:h-16 rounded-full border border-[#B7B7B7] bg-white flex items-center justify-center hover:bg-black hover:text-white transition-all ease-in duration-300 cursor-pointer"
-          >
-            <ChevronRight className="w-5 h-5 sm:w-8 sm:h-8 stroke-1" />
-          </div>
-        </div>
       </div>
 
       {/* Marquee */}
@@ -213,7 +189,7 @@ export default function FeaturedMarquee() {
                   >
                     {card.heading}
                   </h3>
-                  <p className="text-[clamp(10px,0.9vw,40px)] line-clamp-1 text-[#F6F6F6]">
+                  <p className="text-[clamp(10px,0.9vw,40px)] line-clamp-1 text-[var(--primary)]">
                     {card.cardText}
                   </p>
                 </div>
@@ -249,7 +225,7 @@ export default function FeaturedMarquee() {
                 >
                   {card.heading}
                 </h3>
-                <p className="text-[clamp(10px,2.5vw,40px)] sm:text-[clamp(10px,1.5vw,30px)] line-clamp-1 text-[#F6F6F6]">
+                <p className="text-[clamp(10px,2.5vw,40px)] sm:text-[clamp(10px,1.5vw,30px)] line-clamp-1 text-[var(--primary)]">
                   {card.cardText}
                 </p>
               </div>

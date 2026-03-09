@@ -31,18 +31,18 @@ export default function CircularWheel() {
 
   return (
     <div className="w-full pt-4 pb-[20vw] overflow-hidden flex justify-center">
-      <div
-        className="relative flex gap-[10vw] sm:gap-[7vw] lg:gap-[4vw]"
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
-      >
+      <div className="relative flex gap-[10vw] sm:gap-[7vw] lg:gap-[4vw] pt-6">
         {rotations.map((_, slotIndex) => {
           const imgIndex = (index + slotIndex) % images.length;
 
           return (
             <div
+              onMouseEnter={() => setHover(true)}
+              onMouseLeave={() => setHover(false)}
               key={slotIndex}
-              className="relative min-w-[45vw] h-[55vw] sm:min-w-[25vw] sm:h-[35vw] lg:min-w-[15vw] lg:h-[20vw] rounded-2xl overflow-hidden will-change-transform 
+              className="relative min-w-[45vw] h-[55vw] sm:min-w-[25vw] sm:h-[35vw] lg:min-w-[15vw] lg:h-[20vw] rounded-2xl overflow-hidden will-change-transform transition-transform duration-300
+                [--hoverY:0]
+                lg:hover:[--hoverY:-2]
                 [--rScale:0.6]
                 [--xScale:20]
                 [--yScale:1.4]
@@ -55,8 +55,8 @@ export default function CircularWheel() {
               style={{
                 transform: `
                   rotate(calc(${rotations[slotIndex]}deg * var(--rScale)))
-      translateX(calc(${translateX[slotIndex]}vw * var(--xScale)))
-      translateY(calc(${translateY[slotIndex]}vw * var(--yScale)))
+                  translateX(calc(${translateX[slotIndex]}vw * var(--xScale)))
+                  translateY(calc((${translateY[slotIndex]} + var(--hoverY)) * 1vw * var(--yScale)))
                 `,
               }}
             >

@@ -4,7 +4,7 @@ function BrowseCategories() {
   return (
     <div>
       <div className="w-full h-full flex flex-col gap-3 items-center justify-center">
-        <button className="relative border bg-[#F6F6F6] mt-[10%] lg:mt-[4%]">
+        <button className="relative border bg-[var(--primary)] mt-[10%] lg:mt-[4%] cursor-default">
           31000+{"  "}
           <span style={{ fontFamily: "Playfair Display" }}>Products</span>
         </button>

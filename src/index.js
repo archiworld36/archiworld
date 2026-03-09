@@ -6,11 +6,14 @@ import { Provider } from "react-redux";
 import store from "./store";
 import "primereact/resources/themes/saga-blue/theme.css"; // or any other theme
 import "primereact/resources/primereact.min.css";
+import { PrimeReactProvider } from "primereact/api";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
-    <App />
+    <PrimeReactProvider>
+      <App />
+    </PrimeReactProvider>
   </Provider>,
 );
 

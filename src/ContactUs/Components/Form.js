@@ -54,7 +54,7 @@ function Form() {
           listing for the fastest response.
         </h3>
         <div className="py-[24px] sm:py-[30px] lg:py-[40px] flex flex-col lg:flex-row justify-center gap-6">
-          <div className="p-[4vw] sm:p-[3vw] lg:p-[1.5vw] w-full bg-[#F6F6F6] rounded-3xl flex flex-col justify-between gap-4">
+          <div className="p-[4vw] sm:p-[3vw] lg:p-[1.5vw] w-full bg-[var(--primary)] rounded-3xl flex flex-col justify-between gap-4">
             <div>
               <h2 className="text-[clamp(20px,3.5vw,120px)] sm:text-[clamp(20px,3vw,120px)] lg:text-[clamp(20px,1.5vw,120px)] mb-2">
                 For Sales
@@ -85,7 +85,7 @@ function Form() {
               </h3>
             </div>
           </div>
-          <div className="p-[4vw] sm:p-[3vw] lg:p-[1.5vw] w-full bg-[#F6F6F6] rounded-3xl flex flex-col justify-between gap-4">
+          <div className="p-[4vw] sm:p-[3vw] lg:p-[1.5vw] w-full bg-[var(--primary)] rounded-3xl flex flex-col justify-between gap-4">
             <div>
               <h2 className="text-[clamp(20px,3.5vw,120px)] sm:text-[clamp(20px,3vw,120px)] lg:text-[clamp(20px,1.5vw,120px)] mb-2">
                 For Support
@@ -119,7 +119,7 @@ function Form() {
         </div>
       </div>
       {/* Right Section Form*/}
-      <div className="px-[15px] py-[10px] sm:px-[20px] sm:py-[15px] lg:px-[30px] lg:py-[20px] w-full bg-[#F6F6F6] rounded-3xl">
+      <div className="px-[15px] py-[10px] sm:px-[20px] sm:py-[15px] lg:px-[30px] lg:py-[20px] w-full bg-[var(--primary)] rounded-3xl">
         <h2 className="text-[clamp(20px,4.5vw,120px)] sm:text-[clamp(20px,4vw,120px)] lg:text-[clamp(20px,2.5vw,120px)] mb-2">
           Send us a Message
         </h2>

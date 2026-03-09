@@ -8,7 +8,7 @@ function MenuItem({ label, location }) {
   return (
     <div
       onClick={() => navigate(location)}
-      className="flex justify-between group border-b border-[#B7B7B7] px-4 py-4 cursor-pointer transition hover:bg-[#5E5E5E]"
+      className="flex justify-between group border-b border-[var(--stroke)] px-4 py-4 cursor-pointer transition hover:bg-[#5E5E5E]"
     >
       <span>{label}</span>
       <ArrowUpRight
@@ -25,25 +25,25 @@ export default function Footer({ topStat = false }) {
       {/* ===== Top Stats Section ===== */}
       {topStat && (
         <div className="mx-auto py-14">
-          <div className="flex flex-wrap border-b border-[#B7B7B7] text-center md:text-left">
-            <div className="border-r border-b lg:border-b-0 border-[#B7B7B7] w-1/2 lg:w-1/4 py-5">
-              <p className="text-[#F6F6F6] text-center text-[clamp(10px,3vw,40px)] sm:text-[clamp(10px,1.5vw,30px)] lg:text-[clamp(10px,0.9vw,40px)]">
+          <div className="flex flex-wrap border-b border-[var(--stroke)] text-center md:text-left">
+            <div className="border-r border-b lg:border-b-0 border-[var(--stroke)] w-1/2 lg:w-1/4 py-5">
+              <p className="text-[var(--primary)] text-center text-[clamp(10px,3vw,40px)] sm:text-[clamp(10px,1.5vw,30px)] lg:text-[clamp(10px,0.9vw,40px)]">
                 Total Users
               </p>
               <h2 className="text-center text-[clamp(12px,6vw,120px)] sm:text-[clamp(15px,4.5vw,120px)] lg:text-[clamp(12px,3.5vw,120px)] font-semibold">
                 10K +
               </h2>
             </div>
-            <div className="lg:border-r border-b lg:border-b-0 lg:border-[#B7B7B7] w-1/2 lg:w-1/4 py-5">
-              <p className="text-[#F6F6F6] text-center text-[clamp(10px,3vw,40px)] sm:text-[clamp(10px,1.5vw,30px)] lg:text-[clamp(10px,0.9vw,40px)]">
+            <div className="lg:border-r border-b lg:border-b-0 lg:border-[var(--stroke)] w-1/2 lg:w-1/4 py-5">
+              <p className="text-[var(--primary)] text-center text-[clamp(10px,3vw,40px)] sm:text-[clamp(10px,1.5vw,30px)] lg:text-[clamp(10px,0.9vw,40px)]">
                 Total Brands
               </p>
               <h2 className="text-center text-[clamp(12px,6vw,120px)] sm:text-[clamp(15px,4.5vw,120px)] lg:text-[clamp(12px,3.5vw,120px)] font-semibold">
                 200 +
               </h2>
             </div>
-            <div className="border-r border-[#B7B7B7] w-1/2 lg:w-1/4 py-5">
-              <p className="text-[#F6F6F6] text-center text-[clamp(10px,3vw,40px)] sm:text-[clamp(10px,1.5vw,30px)] lg:text-[clamp(10px,0.9vw,40px)]">
+            <div className="border-r border-[var(--stroke)] w-1/2 lg:w-1/4 py-5">
+              <p className="text-[var(--primary)] text-center text-[clamp(10px,3vw,40px)] sm:text-[clamp(10px,1.5vw,30px)] lg:text-[clamp(10px,0.9vw,40px)]">
                 Total Products
               </p>
               <h2 className="text-center text-[clamp(12px,6vw,120px)] sm:text-[clamp(15px,4.5vw,120px)] lg:text-[clamp(12px,3.5vw,120px)] font-semibold">
@@ -51,7 +51,7 @@ export default function Footer({ topStat = false }) {
               </h2>
             </div>
             <div className="w-1/2 lg:w-1/4 py-5">
-              <p className="text-[#F6F6F6] text-center text-[clamp(10px,3vw,40px)] sm:text-[clamp(10px,1.5vw,30px)] lg:text-[clamp(10px,0.9vw,40px)]">
+              <p className="text-[var(--primary)] text-center text-[clamp(10px,3vw,40px)] sm:text-[clamp(10px,1.5vw,30px)] lg:text-[clamp(10px,0.9vw,40px)]">
                 Daily Users
               </p>
               <h2 className="text-center text-[clamp(12px,6vw,120px)] sm:text-[clamp(15px,4.5vw,120px)] lg:text-[clamp(12px,3.5vw,120px)] font-semibold">
@@ -116,7 +116,7 @@ export default function Footer({ topStat = false }) {
       </div>
 
       {/* Bottom Divider */}
-      <div className="border-t border-[#B7B7B7]" />
+      <div className="border-t border-[var(--stroke)]" />
 
       {/* ===== Bottom Footer Row ===== */}
       <div className="mx-auto sm:px-6 py-6 flex flex-col md:flex-row justify-between sm:items-center text-[clamp(10px,3.5vw,40px)] sm:text-[clamp(10px,2vw,30px)] lg:text-[clamp(10px,0.9vw,40px)]">

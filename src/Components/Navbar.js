@@ -42,20 +42,20 @@ function Navbar({ color }) {
         className={`w-fit h-full z-50 relative cursor-pointer`}
       />
       <div
-        className={`w-full h-full bg-gray-300 bg-opacity-15 rounded-[43px] p-[0.6vw] border border-white hidden lg:flex gap-[1vw] backdrop-blur-md`}
+        className={`w-full h-full bg-gray-400 bg-opacity-15 rounded-[43px] p-[0.6vw] border border-white hidden lg:flex gap-[1vw] backdrop-blur-md`}
       >
         <div
           className={`flex w-full relative justify-center items-center rounded-[33px] text-[clamp(10px,1.2vw,40px)] text-${color} border border-[#9A9A9A]`}
         >
           <div className="inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-            <Search className="w-[clamp(10px,1.5vw,40px)] h-[clamp(10px,1.5vw,40px)] stroke-1" />
+            <Search className="w-[clamp(10px,1.5vw,40px)] h-[clamp(10px,1.5vw,40px)] [var(--stroke)]-1" />
           </div>
           <InputText
             type="search"
             placeholder="What are you looking for?"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className={`pl-4 w-full shadow-none bg-transparent ${color === "white" ? "placeholder:text-[#F6F6F6]" : "placeholder:text-[#000000]"}`}
+            className={`pl-4 w-full shadow-none bg-transparent ${color === "white" ? "placeholder:text-[var(--primary)]" : "placeholder:text-black"}`}
           />
         </div>
         <button className={`text-white w-fit h-full bg-black`}>Search</button>
@@ -66,7 +66,7 @@ function Navbar({ color }) {
             onClick={() => setSearch(true)}
             className={`flex w-fit h-full !aspect-square rounded-full p-4 text-${color} border border-[#9A9A9A] bg-white/10 backdrop-blur-sm shadow-[0_20px_50px_rgba(0,0,0,0.25)]`}
           >
-            <Search className="w-full h-full stroke-1" />
+            <Search className="w-full h-full [var(--stroke)]-1" />
           </div>
         )}
         {!open && (
@@ -128,14 +128,14 @@ function Navbar({ color }) {
             className={`flex w-full relative justify-center items-center text-[clamp(12px,4vw,40px)] sm:text-[clamp(12px,2.3vw,30px)] text-black`}
           >
             <div className="inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <Search className="w-6 h-6 stroke-1" />
+              <Search className="w-6 h-6 [var(--stroke)]-1" />
             </div>
             <InputText
               type="search"
               placeholder="What are you looking for?"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className={`pl-4 w-full shadow-none bg-transparent placeholder:text-[#000000]`}
+              className={`pl-4 w-full shadow-none bg-transparent placeholder:text-black`}
             />
           </div>
           <button className={`text-white w-fit h-full bg-black`}>Search</button>

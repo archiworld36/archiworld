@@ -81,18 +81,18 @@ export default function WhyArchiworld() {
       <div className="flex lg:hidden justify-center px-4 gap-4 mt-6">
         <div
           onClick={moveLeft}
-          className="w-10 h-10 sm:w-16 sm:h-16 rounded-full border border-[#B7B7B7] bg-white flex items-center justify-center 
+          className="w-10 h-10 sm:w-16 sm:h-16 rounded-full border border-[var(--stroke)] bg-white flex items-center justify-center 
           hover:bg-black hover:text-white transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          <ChevronLeft className="w-5 h-5 sm:w-8 sm:h-8 stroke-1" />
+          <ChevronLeft className="w-5 h-5 sm:w-8 sm:h-8 [var(--stroke)]-1" />
         </div>
 
         <div
           onClick={moveRight}
-          className="w-10 h-10 sm:w-16 sm:h-16 rounded-full border border-[#B7B7B7] bg-white flex items-center justify-center 
+          className="w-10 h-10 sm:w-16 sm:h-16 rounded-full border border-[var(--stroke)] bg-white flex items-center justify-center 
           hover:bg-black hover:text-white transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          <ChevronRight className="w-5 h-5 sm:w-8 sm:h-8 stroke-1" />
+          <ChevronRight className="w-5 h-5 sm:w-8 sm:h-8 [var(--stroke)]-1" />
         </div>
       </div>
     </section>

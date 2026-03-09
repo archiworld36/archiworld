@@ -10,7 +10,7 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   --moz-appearance: textfield;
 }
-input[type=checkbox] {
+input[type="checkbox"] {
   accent-color: black;
 }
 /* Remove shadow from filter input */
@@ -51,10 +51,12 @@ input[type=checkbox] {
   --card: 0 0% 100%;
   --card-foreground: 222.2 47.4% 11.2%;
 
-  --primary: 221.2 83.2% 53.3%;
+  --primary: #f6f6f6;
+  --stroke: #b7b7b7;
+
   --primary-foreground: 210 40% 98%;
 
-  --secondary: 210 40% 96.1%;
+  --secondary: #4a4a4a;
   --secondary-foreground: 222.2 47.4% 11.2%;
 
   --accent: 210 40% 85%;
@@ -96,6 +98,24 @@ button {
   padding: 0.7vw 3.8vw;
   border-radius: 33px;
 }
+.p-checkbox .p-checkbox-box {
+  border: 1px solid #d1d5db !important;
+}
+.prose h1 {
+  font-size: clamp(10px, 3vw, 40px);
+}
+.prose h2 {
+  font-size: clamp(10px, 1.8vw, 40px);
+}
+.prose p,
+.prose li {
+  font-size: clamp(10px, 1.3vw, 40px);
+}
+.prose ol {
+  padding-left: 20px;
+  list-style: disc;
+}
+
 .p-dropdown .p-dropdown-label.p-placeholder {
   color: black !important;
 }
@@ -112,12 +132,12 @@ button {
 
 /* Selected Range */
 .p-slider .p-slider-range {
-  background: #000000;   /* selected bar */
+  background: black; /* selected bar */
 }
 
 /* Slider Thumb (ellipse / handle) */
 .p-slider .p-slider-handle {
-  background: #000000;
+  background: black;
   width: 20px;
   height: 20px;
   margin-top: -10px; /* centers the handle */
@@ -125,16 +145,44 @@ button {
 
 @media (max-width: 1023px) {
   button {
-    font-size: clamp(12px, 2.3vw, 30px);
+    font-size: clamp(10px, 2.3vw, 30px);
     padding: 1.2vw 5vw;
     border-radius: 33px;
+  }
+  .prose h1 {
+    font-size: clamp(10px, 3.8vw, 40px);
+  }
+  .prose h2 {
+    font-size: clamp(10px, 2.2vw, 40px);
+  }
+  .prose p,
+  .prose li {
+    font-size: clamp(10px, 1.5vw, 40px);
+  }
+  .prose ol {
+    padding-left: 20px;
+    list-style: disc;
   }
 }
 @media (max-width: 639px) {
   button {
-    font-size: clamp(12px, 4vw, 40px);
+    font-size: clamp(10px, 3.4vw, 40px);
     padding: 1.5vw 7vw;
     border-radius: 33px;
+  }
+  .prose h1 {
+    font-size: clamp(10px, 5vw, 40px);
+  }
+  .prose h2 {
+    font-size: clamp(10px, 4vw, 40px);
+  }
+  .prose p,
+  .prose li {
+    font-size: clamp(10px, 3vw, 40px);
+  }
+  .prose ol {
+    padding-left: 20px;
+    list-style: disc;
   }
 }
 

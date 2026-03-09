@@ -1,9 +1,13 @@
-import { ChevronLeft, ChevronRight, MapPin, Settings2, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Settings2, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Dropdown } from "primereact/dropdown";
 import Filters from "./Filters";
 import { useLocation } from "wouter";
 import logoBlack from "../../assets/Homepage/Banner/logoBlack.png";
+import ProductCard from "../../Components/ProductCard";
+import { MultiSelect } from "primereact/multiselect";
+import { State } from "country-state-city";
+
 const dummyProducts = Array.from({ length: 400 }).map((_, i) => ({
   id: i + 1,
   title: "Kohler Memoirs Pedestal Sink",
@@ -13,7 +17,7 @@ const dummyProducts = Array.from({ length: 400 }).map((_, i) => ({
   image: `https://picsum.photos/500/500?random=${i + 1}`,
 }));
 
-const PRODUCTS_PER_PAGE = 12;
+const PRODUCTS_PER_PAGE = 24;
 
 export default function ProductsPage() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -21,11 +25,33 @@ export default function ProductsPage() {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const totalPages = Math.ceil(dummyProducts.length / PRODUCTS_PER_PAGE);
   const [, navigate] = useLocation();
-
+  const [locationArea, setLocationArea] = useState([]);
+  const [sortBy, setSortBy] = useState("");
+  const [selectedLocations, setSelectedLocations] = useState([]);
   const paginatedProducts = dummyProducts.slice(
     (currentPage - 1) * PRODUCTS_PER_PAGE,
     currentPage * PRODUCTS_PER_PAGE,
   );
+
+  useEffect(() => {
+    // Load Indian states on mount
+    const indianStates = State.getStatesOfCountry("IN").map((s) => ({
+      label: s.name,
+      value: s.name,
+    }));
+    setLocationArea([
+      { label: "Pan India", value: "Pan India" }, // ✅ extra option
+      ...indianStates,
+    ]);
+  }, []);
+
+  const handleLocationChange = (value) => {
+    if (value.includes("Pan India")) {
+      setSelectedLocations(["Pan India"]);
+    } else {
+      setSelectedLocations(value);
+    }
+  };
 
   useEffect(() => {
     if (showMobileFilters) {
@@ -62,14 +88,25 @@ export default function ProductsPage() {
     return pages;
   };
 
+  const sortOptions = [
+    { name: "Select", value: "" },
+    { name: "Price: Low to High", value: "Price: Low to High" },
+    { name: "Price: High to Low", value: "Price: High to Low" },
+    { name: "Newest First", value: "Newest First" },
+  ];
+
   return (
-    <div className="flex flex-col text-black">
+    <div className="text-black">
       {/* Main Layout */}
       <div className="flex flex-1 relative lg:px-[2vw] pb-10 gap-[2.8vw] lg:gap-[2.2vw]">
         {/* ================= LEFT FILTERS ================= */}
         {showFilters && (
           <div className="hidden lg:block lg:w-1/4 px-4 sticky h-full max-h-[calc(100vh-0.5rem)] top-2 overscroll-contain overflow-scroll">
-            <Filters />
+            <Filters
+              locationArea={locationArea}
+              setSelectedLocations={setSelectedLocations}
+              selectedLocations={selectedLocations}
+            />
           </div>
         )}
         {showMobileFilters && (
@@ -96,7 +133,11 @@ export default function ProductsPage() {
               </div>
             </div>
             <div className="pt-5 bg-white w-full px-6">
-              <Filters />
+              <Filters
+                locationArea={locationArea}
+                setSelectedLocations={setSelectedLocations}
+                selectedLocations={selectedLocations}
+              />
             </div>
           </div>
         )}
@@ -124,24 +165,29 @@ export default function ProductsPage() {
                 <Settings2 className="w-5 h-5" />
                 Filters
               </button>
-              <Dropdown
-                placeholder="Specify"
-                checkmark
-                className="flex-nowrap shadow-none bg-[#F6F6F6] rounded-full px-3 placeholder:text-black"
-              />
-              <Dropdown
+              <MultiSelect
                 placeholder="All Locations"
-                checkmark
-                className="flex-nowrap shadow-none bg-[#F6F6F6] rounded-full px-3 placeholder:text-black"
+                options={locationArea}
+                value={selectedLocations}
+                onChange={(e) => handleLocationChange(e.value)}
+                maxSelectedLabels={3}
+                showSelectAll
+                selectAllLabel="Select All"
+                className="flex-nowrap max-w-52 shadow-none bg-[var(--primary)] rounded-full px-3 placeholder:text-black"
               />
             </div>
 
             <div className="flex flex-nowrap w-full lg:w-1/2 justify-between lg:justify-end items-center lg:gap-2">
               <label className="w-full lg:w-fit">Sort By</label>
               <Dropdown
+                value={sortBy}
+                options={sortOptions}
+                optionLabel="name"
+                optionValue="value"
+                onChange={(e) => setSortBy(e.value)}
                 placeholder="Select"
                 checkmark
-                className="w-full lg:w-fit shadow-none bg-[#F6F6F6] rounded-full px-4 placeholder:text-black"
+                className="w-full lg:w-fit shadow-none bg-[var(--primary)] rounded-full px-4 placeholder:text-black"
               />
             </div>
           </div>
@@ -150,41 +196,7 @@ export default function ProductsPage() {
           <div
             className={`grid grid-cols-2 ${showFilters ? "sm:grid-cols-2 lg:grid-cols-3" : "sm:grid-cols-3 lg:grid-cols-4"} gap-6`}
           >
-            {paginatedProducts.map((product) => (
-              <div
-                onClick={() => navigate(`/products/${product.id}`)}
-                key={product.id}
-                className="text-black overflow-hidden cursor-pointer"
-              >
-                <div className="overflow-hidden relative rounded-2xl lg:rounded-3xl">
-                  <img
-                    src={product.image}
-                    alt={product.title}
-                    className="aspect-square w-full object-cover"
-                  />
-                  <div className="absolute bottom-0 left-0 w-full px-6 py-6 h-1/3 flex flex-col justify-end gap-1 text-black transition-all bg-gradient-to-t from-black/80 via-black/20 to-transparent backdrop-blur-[1px]">
-                    <h3
-                      style={{ fontFamily: "Playfair Display" }}
-                      className="text-[clamp(10px,2.5vw,40px)] sm:text-[clamp(10px,1.5vw,30px)] lg:text-[clamp(10px,0.9vw,40px)] bg-white w-fit rounded-full px-4 py-1"
-                    >
-                      {product.category}
-                    </h3>
-                  </div>
-                </div>
-
-                <div className="text-[clamp(10px,2.5vw,40px)] sm:text-[clamp(10px,1.5vw,30px)] lg:text-[clamp(10px,0.9vw,40px)] p-4">
-                  <p className="mb-1">
-                    <span className="font-light">Price</span>{" "}
-                    <span className="font-bold">- {product.price}</span>
-                  </p>
-                  <h3 className="font-semibold mb-1">{product.title}</h3>
-                  <p className="text-[#4A4A4A] flex gap-1 items-center">
-                    <MapPin className="w-4 h-4" />
-                    {product.location}
-                  </p>
-                </div>
-              </div>
-            ))}
+            <ProductCard paginatedProducts={paginatedProducts} />
           </div>
 
           {/* ================= PAGINATION ================= */}
@@ -199,7 +211,7 @@ export default function ProductsPage() {
               onClick={() => setCurrentPage((prev) => prev - 1)}
               className="px-1 lg:px-3 py-1 bg-white text-black flex items-center gap-2 rounded disabled:opacity-40 font-light"
             >
-              <ChevronLeft className="stroke-1" />{" "}
+              <ChevronLeft className="[var(--stroke)]-1" />{" "}
               <span className="hidden lg:block">Previous</span>
             </button>
 
@@ -214,7 +226,7 @@ export default function ProductsPage() {
                   onClick={() => setCurrentPage(page)}
                   className={`px-3 py-1.5 lg:px-5 lg:py-2 rounded-lg text-black ${
                     currentPage === page
-                      ? "bg-[#F6F6F6] border border-[#B7B7B7]"
+                      ? "bg-[var(--primary)] border border-[var(--stroke)]"
                       : "bg-white"
                   }`}
                 >
@@ -229,7 +241,7 @@ export default function ProductsPage() {
               className="px-1 lg:px-3 py-1 bg-white text-black flex items-center gap-2 rounded disabled:opacity-40 font-light"
             >
               <span className="hidden lg:block">Next</span>{" "}
-              <ChevronRight className="stroke-1" />
+              <ChevronRight className="[var(--stroke)]-1" />
             </button>
           </div>
         </div>

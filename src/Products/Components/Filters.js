@@ -15,9 +15,35 @@ import {
   fetchSubCategory,
 } from "./masterDataAPI";
 import { Slider } from "primereact/slider";
-import { State } from "country-state-city";
 
-function Filters() {
+const FilterSection = ({ title, sectionKey, children }) => {
+  const [openSection, setOpenSection] = useState("categories");
+  const toggleSection = (key) => {
+    setOpenSection((prev) => (prev === key ? null : key));
+  };
+  const isOpen = openSection === sectionKey;
+
+  return (
+    <div className="border-t border-[var(--stroke)] py-5">
+      <h4
+        onClick={() => toggleSection(sectionKey)}
+        className="text-[clamp(12px,3.5vw,40px)] sm:text-[clamp(12px,2.1vw,30px)] lg:text-[clamp(10px,1.2vw,40px)] font-medium flex justify-between items-center cursor-pointer"
+      >
+        {title}
+
+        {isOpen ? (
+          <ChevronDown className="w-5 h-5" />
+        ) : (
+          <ChevronUp className="w-5 h-5" />
+        )}
+      </h4>
+
+      {isOpen && <div>{children}</div>}
+    </div>
+  );
+};
+
+function Filters({ locationArea, selectedLocations, setSelectedLocations }) {
   const {
     brandOptions = [],
     materialOptions = [],
@@ -28,18 +54,35 @@ function Filters() {
   const [openCategoryId, setOpenCategoryId] = useState(null);
   const [selectedSubCategories, setSelectedSubCategories] = useState([]);
   const dispatch = useDispatch();
-  const [openSection, setOpenSection] = useState("categories");
   const [searchTerm, setSearchTerm] = useState("");
   const [searchTermBrand, setSearchTermBrand] = useState("");
   const [lengthRange, setLengthRange] = useState([0, 200]);
   const [widthRange, setWidthRange] = useState([0, 200]);
   const [heightRange, setHeightRange] = useState([0, 200]);
-  const [diameterRange, setDiameterRange] = useState([0, 200]);
   const [weightRange, setWeightRange] = useState([0, 200]);
   const [priceRange, setPriceRange] = useState([0, 1000000]);
   const [searchTermLocation, setSearchTermLocation] = useState("");
-  const [locationArea, setLocationArea] = useState([]);
-  const [selectedLocations, setSelectedLocations] = useState([]);
+
+  const handleLocationChange = (value) => {
+    if (value === "Pan India") {
+      // If Pan India selected → remove others
+      if (selectedLocations.includes("Pan India")) {
+        setSelectedLocations([]);
+      } else {
+        setSelectedLocations(["Pan India"]);
+      }
+    } else {
+      let updated = [...selectedLocations];
+      // Remove Pan India if selecting states
+      updated = updated.filter((loc) => loc !== "Pan India");
+      if (updated.includes(value)) {
+        updated = updated.filter((loc) => loc !== value);
+      } else {
+        updated.push(value);
+      }
+      setSelectedLocations(updated);
+    }
+  };
 
   const filteredMaterials = materialOptions.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase()),
@@ -52,18 +95,6 @@ function Filters() {
   const filteredLocations = locationArea.filter((item) =>
     item.label.toLowerCase().includes(searchTermLocation.toLowerCase()),
   );
-
-  useEffect(() => {
-    // Load Indian states on mount
-    const indianStates = State.getStatesOfCountry("IN").map((s) => ({
-      label: s.name,
-      value: s.name,
-    }));
-    setLocationArea([
-      { label: "Pan India", value: "Pan India" }, // ✅ extra option
-      ...indianStates,
-    ]);
-  }, []);
 
   const fetchBrandOptionsOnce = useCallback(() => {
     dispatch(fetchBrandOptions());
@@ -100,10 +131,6 @@ function Filters() {
     );
   };
 
-  const toggleSection = (key) => {
-    setOpenSection((prev) => (prev === key ? null : key));
-  };
-
   const handleUseCurrentLocation = async () => {
     if (!navigator.geolocation) {
       alert("Geolocation is not supported by your browser");
@@ -134,30 +161,6 @@ function Filters() {
     });
   };
 
-  const handleLocationChange = (value) => {
-    if (value === "Pan India") {
-      // If Pan India selected → remove others
-      if (selectedLocations.includes("Pan India")) {
-        setSelectedLocations([]);
-      } else {
-        setSelectedLocations(["Pan India"]);
-      }
-    } else {
-      let updated = [...selectedLocations];
-
-      // Remove Pan India if selecting states
-      updated = updated.filter((loc) => loc !== "Pan India");
-
-      if (updated.includes(value)) {
-        updated = updated.filter((loc) => loc !== value);
-      } else {
-        updated.push(value);
-      }
-
-      setSelectedLocations(updated);
-    }
-  };
-
   const colors = [
     { code: "000000", name: "Black" },
     { code: "1447E6", name: "Blue" },
@@ -171,31 +174,8 @@ function Filters() {
     { code: "FF0000", name: "Red" },
   ];
 
-  const FilterSection = ({ title, sectionKey, children }) => {
-    const isOpen = openSection === sectionKey;
-
-    return (
-      <div className="border-t border-[#B7B7B7] py-5">
-        <h4
-          onClick={() => toggleSection(sectionKey)}
-          className="text-[clamp(12px,3.5vw,40px)] sm:text-[clamp(12px,2.1vw,30px)] lg:text-[clamp(10px,1.2vw,40px)] font-medium flex justify-between items-center cursor-pointer"
-        >
-          {title}
-
-          {isOpen ? (
-            <ChevronDown className="w-5 h-5" />
-          ) : (
-            <ChevronUp className="w-5 h-5" />
-          )}
-        </h4>
-
-        {isOpen && <div>{children}</div>}
-      </div>
-    );
-  };
-
   return (
-    <div className="text-sm pb-20">
+    <div className="pb-20 relative">
       {/* Categories */}
       <FilterSection title="Categories" sectionKey="categories">
         <ul className="space-y-5 pt-5">
@@ -204,7 +184,7 @@ function Filters() {
               {/* Category Row */}
               <div
                 onClick={() => handleCategoryClick(item._id)}
-                className="text-[clamp(10px,2.2vw,40px)] sm:text-[clamp(12px,1.9vw,30px)] lg:text-[clamp(10px,1vw,40px)] flex justify-between items-center cursor-pointer"
+                className="text-[clamp(10px,3vw,40px)] sm:text-[clamp(12px,1.9vw,30px)] lg:text-[clamp(10px,1vw,40px)] flex justify-between items-center cursor-pointer"
               >
                 <span>{item.name}</span>
 
@@ -217,13 +197,13 @@ function Filters() {
 
               {/* SubCategories */}
               {openCategoryId === item._id && (
-                <ul className="pl-3 text-[clamp(8px,2vw,40px)] sm:text-[clamp(10px,1.8vw,30px)] lg:text-[clamp(10px,0.9vw,40px)]">
+                <ul className="pl-3 text-[clamp(8px,2.5vw,40px)] sm:text-[clamp(10px,1.8vw,30px)] lg:text-[clamp(10px,0.9vw,40px)]">
                   {loadingSubCategories ? (
-                    <li className="text-gray-500 pt-5">
+                    <li className="text-[var(--secondary)] pt-5">
                       Loading sub-categories...
                     </li>
                   ) : subCategories.length === 0 ? (
-                    <li className="text-gray-500 pt-5">
+                    <li className="text-[var(--secondary)] pt-5">
                       No sub-categories found
                     </li>
                   ) : (
@@ -285,7 +265,7 @@ function Filters() {
         </div>
         <ul className="space-y-5 pt-5 text-[clamp(10px,3vw,40px)] sm:text-[clamp(12px,1.9vw,30px)] lg:text-[clamp(10px,1vw,40px)] ">
           {filteredMaterials.length === 0 ? (
-            <li className="text-gray-500">No materials found</li>
+            <li className="text-[var(--secondary)]">No materials found</li>
           ) : (
             filteredMaterials.map((item) => (
               <li key={item._id}>
@@ -315,7 +295,7 @@ function Filters() {
         </div>
         <ul className="space-y-5 pt-5 text-[clamp(10px,3vw,40px)] sm:text-[clamp(12px,1.9vw,30px)] lg:text-[clamp(10px,1vw,40px)]">
           {filteredBrands.length === 0 ? (
-            <li className="text-gray-500">No brand found</li>
+            <li className="text-[var(--secondary)]">No brand found</li>
           ) : (
             filteredBrands.map((item) => (
               <li key={item._id}>
@@ -359,10 +339,10 @@ function Filters() {
                     setLengthRange([value, lengthRange[1]]);
                   }
                 }}
-                className="pr-12 pl-5 w-full py-2 border border-[#B7B7B7] rounded-none text-xl focus:outline-none shadow-none bg-white"
+                className="pr-12 pl-5 w-full py-2 border border-[var(--stroke)] rounded-none text-xl focus:outline-none shadow-none bg-white"
               />
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-[clamp(10px,3vw,40px)] sm:text-[clamp(12px,1.9vw,30px)] lg:text-[clamp(10px,1vw,40px)]">
-                mm
+                cm
               </div>
             </div>
             <div className="h-0 border border-black w-4"></div>
@@ -376,10 +356,10 @@ function Filters() {
                     setLengthRange([lengthRange[0], value]);
                   }
                 }}
-                className="pr-12 pl-5 w-full py-2 border border-[#B7B7B7] rounded-none text-xl focus:outline-none shadow-none bg-white"
+                className="pr-12 pl-5 w-full py-2 border border-[var(--stroke)] rounded-none text-xl focus:outline-none shadow-none bg-white"
               />
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-[clamp(10px,3vw,40px)] sm:text-[clamp(12px,1.9vw,30px)] lg:text-[clamp(10px,1vw,40px)]">
-                mm
+                cm
               </div>
             </div>
           </div>
@@ -413,10 +393,10 @@ function Filters() {
                     setWidthRange([value, widthRange[1]]);
                   }
                 }}
-                className="pr-12 pl-5 w-full py-2 border border-[#B7B7B7] rounded-none text-xl focus:outline-none shadow-none bg-white"
+                className="pr-12 pl-5 w-full py-2 border border-[var(--stroke)] rounded-none text-xl focus:outline-none shadow-none bg-white"
               />
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-[clamp(10px,3vw,40px)] sm:text-[clamp(12px,1.9vw,30px)] lg:text-[clamp(10px,1vw,40px)]">
-                mm
+                cm
               </div>
             </div>
             <div className="h-0 border border-black w-4"></div>
@@ -430,10 +410,10 @@ function Filters() {
                     setWidthRange([widthRange[0], value]);
                   }
                 }}
-                className="pr-12 pl-5 w-full py-2 border border-[#B7B7B7] rounded-none text-xl focus:outline-none shadow-none bg-white"
+                className="pr-12 pl-5 w-full py-2 border border-[var(--stroke)] rounded-none text-xl focus:outline-none shadow-none bg-white"
               />
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-[clamp(10px,3vw,40px)] sm:text-[clamp(12px,1.9vw,30px)] lg:text-[clamp(10px,1vw,40px)]">
-                mm
+                cm
               </div>
             </div>
           </div>
@@ -466,10 +446,10 @@ function Filters() {
                     setHeightRange([value, heightRange[1]]);
                   }
                 }}
-                className="pr-12 pl-5 w-full py-2 border border-[#B7B7B7] rounded-none text-xl focus:outline-none shadow-none bg-white"
+                className="pr-12 pl-5 w-full py-2 border border-[var(--stroke)] rounded-none text-xl focus:outline-none shadow-none bg-white"
               />
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-[clamp(10px,3vw,40px)] sm:text-[clamp(12px,1.9vw,30px)] lg:text-[clamp(10px,1vw,40px)]">
-                mm
+                cm
               </div>
             </div>
             <div className="h-0 border border-black w-4"></div>
@@ -483,63 +463,10 @@ function Filters() {
                     setHeightRange([heightRange[0], value]);
                   }
                 }}
-                className="pr-12 pl-5 w-full py-2 border border-[#B7B7B7] rounded-none text-xl focus:outline-none shadow-none bg-white"
+                className="pr-12 pl-5 w-full py-2 border border-[var(--stroke)] rounded-none text-xl focus:outline-none shadow-none bg-white"
               />
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-[clamp(10px,3vw,40px)] sm:text-[clamp(12px,1.9vw,30px)] lg:text-[clamp(10px,1vw,40px)]">
-                mm
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="mt-8 relative">
-          <label className="text-[clamp(10px,3vw,40px)] sm:text-[clamp(12px,1.9vw,30px)] lg:text-[clamp(10px,1vw,40px)] font-normal">
-            Diameter
-          </label>
-          <Slider
-            value={diameterRange}
-            onChange={(e) => {
-              const [min, max] = e.value;
-              if (min <= max) {
-                setDiameterRange([min, max]);
-              }
-            }}
-            range
-            min={0}
-            max={200}
-            className="mt-6"
-          />
-          <div className="flex gap-3 items-center justify-center mt-8">
-            <div className="relative">
-              <input
-                type="number"
-                value={diameterRange[0]}
-                onChange={(e) => {
-                  const value = Number(e.target.value);
-                  if (value <= diameterRange[1]) {
-                    setDiameterRange([diameterRange[1], value]);
-                  }
-                }}
-                className="pr-12 pl-5 w-full py-2 border border-[#B7B7B7] rounded-none text-xl focus:outline-none shadow-none bg-white"
-              />
-              <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-[clamp(10px,3vw,40px)] sm:text-[clamp(12px,1.9vw,30px)] lg:text-[clamp(10px,1vw,40px)]">
-                mm
-              </div>
-            </div>
-            <div className="h-0 border border-black w-4"></div>
-            <div className="relative">
-              <input
-                type="number"
-                value={diameterRange[1]}
-                onChange={(e) => {
-                  const value = Number(e.target.value);
-                  if (value >= diameterRange[0]) {
-                    setDiameterRange([diameterRange[0], value]);
-                  }
-                }}
-                className="pr-12 pl-5 w-full py-2 border border-[#B7B7B7] rounded-none text-xl focus:outline-none shadow-none bg-white"
-              />
-              <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-[clamp(10px,3vw,40px)] sm:text-[clamp(12px,1.9vw,30px)] lg:text-[clamp(10px,1vw,40px)]">
-                mm
+                cm
               </div>
             </div>
           </div>
@@ -572,7 +499,7 @@ function Filters() {
                     setWeightRange([weightRange[1], value]);
                   }
                 }}
-                className="pr-12 pl-5 w-full py-2 border border-[#B7B7B7] rounded-none text-xl focus:outline-none shadow-none bg-white"
+                className="pr-12 pl-5 w-full py-2 border border-[var(--stroke)] rounded-none text-xl focus:outline-none shadow-none bg-white"
               />
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-[clamp(10px,3vw,40px)] sm:text-[clamp(12px,1.9vw,30px)] lg:text-[clamp(10px,1vw,40px)]">
                 Kg
@@ -589,7 +516,7 @@ function Filters() {
                     setWeightRange([weightRange[0], value]);
                   }
                 }}
-                className="pr-12 pl-5 w-full py-2 border border-[#B7B7B7] rounded-none text-xl focus:outline-none shadow-none bg-white"
+                className="pr-12 pl-5 w-full py-2 border border-[var(--stroke)] rounded-none text-xl focus:outline-none shadow-none bg-white"
               />
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-[clamp(10px,3vw,40px)] sm:text-[clamp(12px,1.9vw,30px)] lg:text-[clamp(10px,1vw,40px)]">
                 Kg
@@ -630,7 +557,7 @@ function Filters() {
                     setPriceRange([priceRange[1], value]);
                   }
                 }}
-                className="pr-12 pl-5 w-full py-2 border border-[#B7B7B7] rounded-none text-xl focus:outline-none shadow-none bg-white"
+                className="pr-12 pl-5 w-full py-2 border border-[var(--stroke)] rounded-none text-xl focus:outline-none shadow-none bg-white"
               />
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-[clamp(10px,3vw,40px)] sm:text-[clamp(12px,1.9vw,30px)] lg:text-[clamp(10px,1vw,40px)]">
                 ₹
@@ -647,7 +574,7 @@ function Filters() {
                     setPriceRange([priceRange[0], value]);
                   }
                 }}
-                className="pr-12 pl-5 w-full py-2 border border-[#B7B7B7] rounded-none text-xl focus:outline-none shadow-none bg-white"
+                className="pr-12 pl-5 w-full py-2 border border-[var(--stroke)] rounded-none text-xl focus:outline-none shadow-none bg-white"
               />
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-[clamp(10px,3vw,40px)] sm:text-[clamp(12px,1.9vw,30px)] lg:text-[clamp(10px,1vw,40px)]">
                 ₹
