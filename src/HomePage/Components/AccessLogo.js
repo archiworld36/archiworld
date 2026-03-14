@@ -1,19 +1,15 @@
-import FurnitureGallery from "../../assets/Homepage/AccessLogo/FurnitureGallery.png";
-import SmartHomes from "../../assets/Homepage/AccessLogo/SmartHomes.png";
-import CreativeLogo from "../../assets/Homepage/AccessLogo/Creative.png";
-
 export default function AccessLogo() {
   const logos = [
-    FurnitureGallery,
-    SmartHomes,
-    CreativeLogo,
-    FurnitureGallery,
-    SmartHomes,
-    CreativeLogo,
-    FurnitureGallery,
-    SmartHomes,
-    CreativeLogo,
-    SmartHomes
+    "https://archiworld-files.s3.ap-south-1.amazonaws.com/featuredLogo/Logo1.png",
+    "https://archiworld-files.s3.ap-south-1.amazonaws.com/featuredLogo/Logo2.png",
+    "https://archiworld-files.s3.ap-south-1.amazonaws.com/featuredLogo/Logo3.png",
+    "https://archiworld-files.s3.ap-south-1.amazonaws.com/featuredLogo/Logo4.png",
+    "https://archiworld-files.s3.ap-south-1.amazonaws.com/featuredLogo/Logo5.png",
+    "https://archiworld-files.s3.ap-south-1.amazonaws.com/featuredLogo/Logo6.png",
+    "https://archiworld-files.s3.ap-south-1.amazonaws.com/featuredLogo/Logo7.png",
+    "https://archiworld-files.s3.ap-south-1.amazonaws.com/featuredLogo/Logo8.png",
+    "https://archiworld-files.s3.ap-south-1.amazonaws.com/featuredLogo/Logo9.png",
+    "https://archiworld-files.s3.ap-south-1.amazonaws.com/featuredLogo/Logo10.png"
   ];
   return (
     <section className="w-full py-[8%] lg:py-[4%]">
