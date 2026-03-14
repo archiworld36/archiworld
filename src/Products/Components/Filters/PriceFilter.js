@@ -1,0 +1,68 @@
+import React, { useState } from "react";
+import { FilterSection } from "./FilterSection";
+import { Slider } from "primereact/slider";
+
+function PriceFilter() {
+  const [priceRange, setPriceRange] = useState([0, 1000000]);
+  return (
+    <FilterSection title="Pricing" sectionKey="price">
+      <div className="mt-8 relative">
+        <label className="text-[clamp(10px,3vw,40px)] sm:text-[clamp(12px,1.9vw,30px)] lg:text-[clamp(10px,1vw,40px)] font-normal">
+          Price Range
+        </label>
+        <Slider
+          value={priceRange}
+          onChange={(e) => {
+            const [min, max] = e.value;
+            if (min <= max) {
+              setPriceRange([min, max]);
+            }
+          }}
+          range
+          min={0}
+          max={1000000}
+          step={1000}
+          className="mt-6"
+        />
+
+        <div className="flex gap-3 items-center justify-center mt-8">
+          <div className="relative">
+            <input
+              type="number"
+              value={priceRange[0]}
+              onChange={(e) => {
+                const value = Number(e.target.value);
+                if (value <= priceRange[1]) {
+                  setPriceRange([priceRange[1], value]);
+                }
+              }}
+              className="pr-12 pl-5 w-full py-2 border border-[var(--stroke)] rounded-none text-xl focus:outline-none shadow-none bg-white"
+            />
+            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-[clamp(10px,3vw,40px)] sm:text-[clamp(12px,1.9vw,30px)] lg:text-[clamp(10px,1vw,40px)]">
+              ₹
+            </div>
+          </div>
+          <div className="h-0 border border-black w-4"></div>
+          <div className="relative">
+            <input
+              type="number"
+              value={priceRange[1]}
+              onChange={(e) => {
+                const value = Number(e.target.value);
+                if (value >= priceRange[0]) {
+                  setPriceRange([priceRange[0], value]);
+                }
+              }}
+              className="pr-12 pl-5 w-full py-2 border border-[var(--stroke)] rounded-none text-xl focus:outline-none shadow-none bg-white"
+            />
+            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-[clamp(10px,3vw,40px)] sm:text-[clamp(12px,1.9vw,30px)] lg:text-[clamp(10px,1vw,40px)]">
+              ₹
+            </div>
+          </div>
+        </div>
+      </div>
+    </FilterSection>
+  );
+}
+
+export default PriceFilter;

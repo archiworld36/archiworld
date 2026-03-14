@@ -59,3 +59,22 @@ export const fetchSubCategory = createAsyncThunk(
     }
   },
 );
+
+export const fetchSubSubCategory = createAsyncThunk(
+  "masterData/fetchSubSubCategory",
+  async (subCategoryId, thunkAPI) => {
+    try {
+      const response = await axios.get(
+        `${BASEURL}/api/get-sub-subCategories/${subCategoryId}`,
+      );
+      return {
+        subCategoryId,
+        data: response.data,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to fetch sub-sub--categories.",
+      );
+    }
+  },
+);

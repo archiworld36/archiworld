@@ -7,10 +7,10 @@ import ProductsPage from "./Components/Products";
 function Products() {
   return (
     <div>
-      <Navbar  color={"black"}/>
+      <Navbar color={"black"} />
       <ProductsBanner />
       <ProductsPage />
-      <Footer/>
+      <Footer />
     </div>
   );
 }
