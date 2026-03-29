@@ -1,7 +1,7 @@
 import React from "react";
 import { FilterSection } from "./FilterSection";
 
-function ColorFilters() {
+function ColorFilters({ selectedColors, setSelectedColors }) {
   const colors = [
     { code: "000000", name: "Black" },
     { code: "1447E6", name: "Blue" },
@@ -14,13 +14,27 @@ function ColorFilters() {
     { code: "808080", name: "Gray" },
     { code: "FF0000", name: "Red" },
   ];
+
+  const handleColorsChange = (colorName) => {
+    setSelectedColors((prev) => {
+      if (prev.includes(colorName)) {
+        // remove if already selected
+        return prev.filter((c) => c !== colorName);
+      } else {
+        // add if not selected
+        return [...prev, colorName];
+      }
+    });
+  };
   return (
     <FilterSection title="Colors" sectionKey="colors">
       <ul className="space-y-5 pt-5">
         {colors.map((item) => (
-          <li key={item._id}>
-            {/* Category Row */}
-            <div className="text-[clamp(10px,3vw,40px)] sm:text-[clamp(12px,1.9vw,30px)] lg:text-[clamp(10px,1vw,40px)] flex justify-between items-center cursor-pointer">
+          <li key={item.code}>
+            <div
+              onClick={() => handleColorsChange(item.name)}
+              className="text-[clamp(10px,3vw,40px)] sm:text-[clamp(12px,1.9vw,30px)] lg:text-[clamp(10px,1vw,40px)] flex justify-between items-center cursor-pointer"
+            >
               <span className="flex gap-2">
                 <div
                   style={{ backgroundColor: `#${item.code}` }}
@@ -28,7 +42,11 @@ function ColorFilters() {
                 ></div>
                 {item.name}
               </span>
-              <input type="checkbox" className="w-5 h-5" />
+              <input
+                type="checkbox"
+                className="w-5 h-5"
+                checked={selectedColors.includes(item.name)}
+              />
             </div>
           </li>
         ))}

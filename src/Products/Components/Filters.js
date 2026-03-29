@@ -13,7 +13,31 @@ import SizeFilter from "./Filters/SizeFilter";
 import PriceFilter from "./Filters/PriceFilter";
 import LocationFilter from "./Filters/LocationFilter";
 
-function Filters({ locationArea, selectedLocations, setSelectedLocations }) {
+function Filters({
+  locationArea,
+  selectedLocations,
+  setSelectedLocations,
+  selectedSubCategories,
+  setSelectedSubCategories,
+  selectedSubSubCategories,
+  setSelectedSubSubCategories,
+  selectedColors,
+  setSelectedColors,
+  selectedMaterial,
+  setSelectedMaterial,
+  selectedBrand,
+  setSelectedBrand,
+  lengthRange,
+  setLengthRange,
+  widthRange,
+  setWidthRange,
+  heightRange,
+  setHeightRange,
+  weightRange,
+  setWeightRange,
+  priceRange,
+  setPriceRange,
+}) {
   const dispatch = useDispatch();
 
   const fetchBrandOptionsOnce = useCallback(() => {
@@ -36,17 +60,40 @@ function Filters({ locationArea, selectedLocations, setSelectedLocations }) {
   return (
     <div className="pb-20 relative">
       {/* Categories */}
-      <CategoriesFilter />
+      <CategoriesFilter
+        selectedSubCategories={selectedSubCategories}
+        setSelectedSubCategories={setSelectedSubCategories}
+        selectedSubSubCategories={selectedSubSubCategories}
+        setSelectedSubSubCategories={setSelectedSubSubCategories}
+      />
       {/* Color */}
-      <ColorFilters />
+      <ColorFilters
+        selectedColors={selectedColors}
+        setSelectedColors={setSelectedColors}
+      />
       {/* Material */}
-      <MaterialFilter />
+      <MaterialFilter
+        selectedMaterial={selectedMaterial}
+        setSelectedMaterial={setSelectedMaterial}
+      />
       {/* Brand */}
-      <BrandFilter />
+      <BrandFilter
+        selectedBrand={selectedBrand}
+        setSelectedBrand={setSelectedBrand}
+      />
       {/* Size */}
-      <SizeFilter />
+      <SizeFilter
+        lengthRange={lengthRange}
+        setLengthRange={setLengthRange}
+        widthRange={widthRange}
+        setWidthRange={setWidthRange}
+        heightRange={heightRange}
+        setHeightRange={setHeightRange}
+        weightRange={weightRange}
+        setWeightRange={setWeightRange}
+      />
       {/* Pricing */}
-      <PriceFilter />
+      <PriceFilter priceRange={priceRange} setPriceRange={setPriceRange} />
       {/* Location */}
       <LocationFilter
         locationArea={locationArea}

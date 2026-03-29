@@ -18,14 +18,14 @@ export default function CatalogueCarousel({ catalogues }) {
   }, []);
 
   // unique categories from backend
-  const categories = ["All", ...new Set(catalogues.map((item) => item.type))];
+  const categories = ["All", ...new Set(catalogues?.map((item) => item.type))];
 
   const filtered =
     activeCategory === "All"
       ? catalogues
       : catalogues.filter((item) => item.type === activeCategory);
 
-  const maxIndex = filtered.length - itemsPerView;
+  const maxIndex = filtered?.length - itemsPerView;
 
   const next = () => {
     if (currentIndex < maxIndex) {
@@ -79,20 +79,25 @@ export default function CatalogueCarousel({ catalogues }) {
             transform: `translateX(-${(currentIndex / itemsPerView) * 100}%)`,
           }}
         >
-          {filtered.map((item, index) => (
+          {filtered?.map((item, index) => (
             <div
               key={index}
               className="min-w-[calc(50%-1rem)] max-w-[calc(50%-1rem)] md:min-w-[calc(25%-1.5rem)] md:max-w-[calc(25%-1.5rem)]"
             >
-              <div className="rounded-xl overflow-hidden relative">
+              <div className="rounded-xl overflow-hidden relative border shadow-md">
                 {/* Banner */}
                 <img
                   src={item.bannerImage}
                   alt=""
-                  className="w-full aspect-[1/1.1] object-cover"
+                  className="w-full aspect-[1/1] object-cover"
                 />
                 {/* Download Button */}
-                <button className="absolute bottom-4 right-4 bg-white rounded-full p-3 shadow-xl">
+                <button
+                  onClick={() =>
+                    window.open(item.pdfFile, "_blank", "noopener,noreferrer")
+                  }
+                  className="absolute bottom-4 right-4 bg-white rounded-full p-3 shadow-xl"
+                >
                   <FileDown />
                 </button>
               </div>
@@ -102,7 +107,7 @@ export default function CatalogueCarousel({ catalogues }) {
       </div>
 
       {/* Navigation Buttons */}
-      {filtered.length > itemsPerView && (
+      {filtered?.length > itemsPerView && (
         <div className="flex justify-center gap-4 mt-8">
           <button
             onClick={prev}

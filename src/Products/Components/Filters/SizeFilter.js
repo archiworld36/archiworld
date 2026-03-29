@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import { FilterSection } from "./FilterSection";
 import { Slider } from "primereact/slider";
 
-function SizeFilter() {
-  const [lengthRange, setLengthRange] = useState([0, 200]);
-  const [widthRange, setWidthRange] = useState([0, 200]);
-  const [heightRange, setHeightRange] = useState([0, 200]);
-  const [weightRange, setWeightRange] = useState([0, 200]);
+function SizeFilter({
+  lengthRange,
+  setLengthRange,
+  widthRange,
+  setWidthRange,
+  heightRange,
+  setHeightRange,
+  weightRange,
+  setWeightRange,
+}) {
   return (
     <FilterSection title="Size" sectionKey="size">
       <div className="mt-8 relative">

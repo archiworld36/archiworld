@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   MapPin,
   Phone,
@@ -11,137 +11,41 @@ import {
   Globe,
   Dot,
 } from "lucide-react";
-import { useLocation, useParams } from "wouter";
-import CatalogueCarousel from "./Catelogues";
-import MoreProducts from "./MoreProducts";
-import ShareModal from "../../../Components/Share";
-function ProductData() {
+import { useLocation } from "wouter";
+
+function ProductData({ productById, setShareOpen }) {
   const [, navigate] = useLocation();
-  const { id } = useParams();
-  const [shareOpen, setShareOpen] = useState(false);
-  const product = {
-    id: 1,
-    title: "Civita Castellana / Italy",
-    description:
-      "Perfect for everyday use, the standard height of the Claremont Basin Tap features an uncomplicated design and works beautifully with all basins and baths",
-    location: "New York, NY",
-    category: "Bathroom",
-    subcategory: "Sink",
-    material: "Premium Brass",
-    brand: "Polished Chrome",
-    size: {
-      length: "20",
-      width: "5",
-      height: "30",
-    },
-    colors: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-    image: `https://picsum.photos/500/500?random=${id}`,
-    user: {
-      id: 1,
-      name: "Domus Falerii",
-      profileLogo: "https://picsum.photos/800/600?random=10",
-      city: "New Delhi",
-      state: "Delhi",
-      mobile: "8928929901",
-      email: "pranav.singh@archiworld.in",
-      serviceState: ["Pan India"],
-      workingSchedule: {
-        days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], // ["Monday", "Tuesday"]
-        from: "09: 00", // "09:00"
-        to: "18:30", // "18:30"
-      },
-    },
-    catalogues: [
-      {
-        type: "Documentation",
-        bannerImage: "https://picsum.photos/500/500?random=23",
-        pdfFile: "https://picsum.pdf/500/500?random=20",
-      },
-      {
-        type: "Documentation",
-        bannerImage: "https://picsum.photos/500/500?random=25",
-        pdfFile: "https://picsum.pdf/500/500?random=25",
-      },
-      {
-        type: "Documentation",
-        bannerImage: "https://picsum.photos/500/500?random=26",
-        pdfFile: "https://picsum.pdf/500/500?random=22",
-      },
-      {
-        type: "Documentation",
-        bannerImage: "https://picsum.photos/500/500?random=28",
-        pdfFile: "https://picsum.pdf/500/500?random=21",
-      },
-      {
-        type: "CAD Files",
-        bannerImage: "https://picsum.photos/500/500?random=36",
-        pdfFile: "https://picsum.pdf/500/500?random=36",
-      },
-      {
-        type: "CAD Files",
-        bannerImage: "https://picsum.photos/500/500?random=30",
-        pdfFile: "https://picsum.pdf/500/500?random=32",
-      },
-      {
-        type: "CAD Files",
-        bannerImage: "https://picsum.photos/500/500?random=31",
-        pdfFile: "https://picsum.pdf/500/500?random=33",
-      },
-      {
-        type: "BIM Objects",
-        bannerImage: "https://picsum.photos/500/500?random=38",
-        pdfFile: "https://picsum.pdf/500/500?random=39",
-      },
-      {
-        type: "3D Models",
-        bannerImage: "https://picsum.photos/500/500?random=399",
-        pdfFile: "https://picsum.pdf/500/500?random=80",
-      },
-    ],
-    features: [
-      "Ceramic disc valves",
-      "WaterSense certified",
-      "ADA compliant",
-      "Limited lifetime warranty",
-      "Easy installation",
-    ],
-    images: [
-      `https://picsum.photos/800/600?random=1`,
-      `https://picsum.photos/800/600?random=2`,
-      `https://picsum.photos/800/600?random=3`,
-      `https://picsum.photos/800/600?random=4`,
-    ],
-    price: {
-      min: 1000,
-      max: 20000,
-    },
-  };
 
-  const suggestedProducts = Array.from({ length: 4 }).map((_, i) => ({
-    id: i + 1,
-    title: "Kohler Memoirs Pedestal Sink",
-    price: "₹4,000",
-    location: "New York, NY",
-    category: "Bathroom",
-    image: `https://picsum.photos/500/500?random=${i + 1}`,
-  }));
+  const [activeImage, setActiveImage] = useState(null);
 
-  const [activeImage, setActiveImage] = useState(product.images[0]);
+  useEffect(() => {
+    if (productById) {
+      setActiveImage(productById.bannerImage);
+    }
+  }, [productById]);
+
+  if (!productById) {
+    return <div className="p-10">No product found</div>;
+  }
+  const allImages = [productById.bannerImage, ...(productById.images || [])];
 
   const handleNext = () => {
-    const currentIndex = product.images.indexOf(activeImage);
-    const nextIndex = (currentIndex + 1) % product.images.length;
-    setActiveImage(product.images[nextIndex]);
+    const currentIndex = allImages.indexOf(activeImage);
+    const nextIndex = (currentIndex + 1) % allImages.length;
+    setActiveImage(allImages[nextIndex]);
   };
 
   const handlePrev = () => {
-    const currentIndex = product.images.indexOf(activeImage);
-    const prevIndex =
-      (currentIndex - 1 + product.images.length) % product.images.length;
-    setActiveImage(product.images[prevIndex]);
+    const currentIndex = allImages.indexOf(activeImage);
+    const prevIndex = (currentIndex - 1 + allImages.length) % allImages.length;
+    setActiveImage(allImages[prevIndex]);
   };
 
   const formatDays = (days) => {
+    if (!Array.isArray(days) || days.length === 0) {
+      return "Not available";
+    }
+
     const dayOrder = [
       "Monday",
       "Tuesday",
@@ -162,7 +66,6 @@ function ProductData() {
       Sunday: "Sun",
     };
 
-    // sort according to week order
     const sortedDays = [...days].sort(
       (a, b) => dayOrder.indexOf(a) - dayOrder.indexOf(b),
     );
@@ -197,6 +100,9 @@ function ProductData() {
   };
 
   const formatTime = (time) => {
+    if (!Array.isArray(time) || time.length === 0) {
+      return "Not available";
+    }
     const [h, m] = time.replace(/\s/g, "").split(":");
     const hour = parseInt(h);
     const suffix = hour >= 12 ? "PM" : "AM";
@@ -205,10 +111,11 @@ function ProductData() {
     return `${formattedHour}:${m} ${suffix}`;
   };
 
-  const phoneNumber = product.user.mobile.replace(/\D/g, ""); // remove spaces etc
+  const phoneNumber = productById.user?.mobile.replace(/\D/g, ""); // remove spaces etc
+  const whatsappMobile = productById.user?.whatsappMobile.replace(/\D/g, "");
 
   const openWhatsApp = () => {
-    const url = `https://wa.me/91${phoneNumber}`;
+    const url = `https://wa.me/91${whatsappMobile}`;
     window.open(url, "_blank");
   };
 
@@ -217,7 +124,7 @@ function ProductData() {
   };
 
   return (
-    <div className="px-[3vw] lg:px-[2.34375vw]">
+    <div>
       {/* Top Navigation*/}
       <div className="pt-[20px] sm:pt-[30px] lg:pt-[40px]">
         <p className="text-[var(--secondary)] text-[clamp(10px,3.5vw,40px)] sm:text-[clamp(10px,2vw,30px)] lg:text-[clamp(10px,0.9vw,40px)]">
@@ -234,30 +141,29 @@ function ProductData() {
           >
             Products
           </span>{" "}
-          {">"} <span>{product.title}</span>
+          {">"} <span>{productById.name}</span>
         </p>
       </div>
       {/* Top Heading*/}
       <div className="py-[20px] sm:py-[30px] lg:py-[40px]">
         <h1 className="text-[clamp(20px,7vw,120px)] sm:text-[clamp(20px,5.6vw,120px)] lg:text-[clamp(20px,4.5vw,120px)] capitalize leading-tight font-medium font-[Poppins]">
-          {product.title}
+          {productById.name}
         </h1>
         <h3
-          onClick={() => navigate(`/vendor/${product.user.id}`)}
+          onClick={() => navigate(`/vendor/${productById.user?._id}`)}
           className="w-fit cursor-pointer mt-2 flex gap-3 items-center text-[clamp(12px,3vw,40px)] sm:text-[clamp(12px,2.3vw,30px)] lg:text-[clamp(10px,1.2vw,40px)]"
         >
           <img
-            src={product.user.profileLogo}
+            src={productById.user?.profileLogo}
             alt=""
             className="w-16 lg:w-20 h-16 lg:h-20 aspect-square object-cover"
           />
-          {product.user.name}
+          {productById.user?.name}
         </h3>
       </div>
       {/*Product */}
       <div className="pb-[20px] sm:pb-[30px] lg:pb-[40px]">
         <div className="flex flex-col lg:flex-row gap-[3vw] lg:gap-[2.34375vw]">
-          {/* LEFT IMAGE SECTION */}
           <div className="w-full">
             <div className="relative rounded-xl overflow-hidden border">
               <img
@@ -278,14 +184,12 @@ function ProductData() {
                 <ChevronRight size={18} />
               </button>
               <div className="absolute bottom-4 right-4 bg-black text-white px-3 text-sm rounded-full">
-                {product.images.indexOf(activeImage) + 1}/
-                {product.images.length}
+                {allImages.indexOf(activeImage) + 1}/{allImages.length}
               </div>
             </div>
 
-            {/* thumbnails */}
             <div className="flex flex-wrap gap-2 mt-3">
-              {product.images.map((img, i) => (
+              {allImages.map((img, i) => (
                 <img
                   key={i}
                   src={img}
@@ -299,63 +203,61 @@ function ProductData() {
             </div>
           </div>
 
-          {/* RIGHT SECTION */}
           <div className="w-full lg:w-[80%] space-y-4 lg:space-y-6">
-            {/* Product Info */}
             <div>
               <h2 className="text-[clamp(12px,3vw,40px)] sm:text-[clamp(12px,2.3vw,30px)] lg:text-[clamp(10px,1.2vw,40px)] font-semibold">
                 Details
               </h2>
 
               <p className="text-[clamp(12px,2.5vw,40px)] sm:text-[clamp(12px,2vw,30px)] lg:text-[clamp(10px,1vw,40px)] mt-2 text-gray-600">
-                {product.description}
+                {productById.description}
               </p>
               <p className="text-[clamp(12px,2.5vw,40px)] sm:text-[clamp(12px,2vw,30px)] lg:text-[clamp(10px,1vw,40px)] mt-2 text-gray-600">
-                {product.category} - {product.subcategory}
+                {productById?.category?.name} - {productById?.subCategory?.name}{" "}
+                {productById?.subSubCategory?.name &&
+                  `- ${productById?.subSubCategory?.name}`}
               </p>
 
               <p className="text-[clamp(12px,3vw,40px)] sm:text-[clamp(12px,2.3vw,30px)] lg:text-[clamp(10px,1.2vw,40px)] font-semibold mt-2">
                 <span className="text-[var(--secondary)] font-light">
                   Price Range{" "}
                 </span>
-                ₹{product.price.min.toLocaleString("en-IN")} - ₹
-                {product.price.max.toLocaleString("en-IN")}
+                ₹{productById.price?.min.toLocaleString("en-IN")} - ₹
+                {productById.price?.max.toLocaleString("en-IN")}
               </p>
             </div>
 
-            {/* CONTACT CARD */}
             <div className="bg-[var(--primary)] rounded-xl p-6 space-y-4 text-[clamp(12px,2vw,40px)] sm:text-[clamp(12px,1.5vw,30px)] lg:text-[clamp(10px,0.8vw,40px)]">
               <div className="flex items-center gap-2 border-b border-[var(--stroke)] pb-3">
                 <MapPin size={16} />
-                {product.user.city}, {product.user.state}
+                {productById.user?.city}, {productById.user?.state}
               </div>
 
               <div className="flex items-center gap-2 border-b border-[var(--stroke)] pb-3">
                 <Phone size={16} />
-                {product.user.mobile}
+                {productById.user?.mobile}
               </div>
 
               <div className="flex items-center gap-2 border-b border-[var(--stroke)] pb-3">
                 <Mail size={16} />
-                {product.user.email}
+                {productById.user?.email}
               </div>
 
               <div className="flex items-center gap-2 pb-3">
                 <Clock size={16} />
-                {formatDays(product.user.workingSchedule.days)}:{" "}
-                {formatTime(product.user.workingSchedule.from)} –{" "}
-                {formatTime(product.user.workingSchedule.to)}
+                {formatDays(productById?.user?.workingSchedule?.days)}:{" "}
+                {formatTime(productById?.user?.workingSchedule?.from)} –{" "}
+                {formatTime(productById?.user?.workingSchedule?.to)}
               </div>
             </div>
 
-            {/* SERVES IN */}
             <div className="bg-[var(--primary)] rounded-xl p-6 space-y-4 text-[clamp(12px,2vw,40px)] sm:text-[clamp(12px,1.5vw,30px)] lg:text-[clamp(10px,0.8vw,40px)]">
               <h2 className="border-b border-[var(--stroke)] pb-3">
                 Serves in:
               </h2>
 
               <div className="flex gap-6">
-                {product.user.serviceState.map((item, index) => (
+                {productById.user?.serviceState.map((item, index) => (
                   <span key={index} className="flex items-center gap-2">
                     <MapPin size={16} /> {item}
                   </span>
@@ -363,7 +265,6 @@ function ProductData() {
               </div>
             </div>
 
-            {/* BUTTONS */}
             <div className="space-y-3">
               <button
                 onClick={openWhatsApp}
@@ -394,13 +295,12 @@ function ProductData() {
                 </button>
               </div>
             </div>
-            {/* Features */}
             <div>
               <h2 className="text-[clamp(12px,3vw,40px)] sm:text-[clamp(12px,2.3vw,30px)] lg:text-[clamp(10px,1.2vw,40px)] font-semibold">
                 Features
               </h2>
               <ul className="py-6 space-y-4 text-[clamp(12px,2.3vw,40px)] sm:text-[clamp(12px,1.8vw,30px)] lg:text-[clamp(10px,1vw,40px)]">
-                {product.features.map((item, index) => (
+                {productById?.features?.map((item, index) => (
                   <li
                     key={index}
                     className="border-b border-[var(--stroke)] pb-3 flex justify-start items-center"
@@ -422,7 +322,7 @@ function ProductData() {
                     Material
                   </span>
                   <span className="flex justify-start items-center">
-                    {product.material}
+                    {productById?.material?.name}
                   </span>
                 </h2>
                 <h2 className="border-b border-[var(--stroke)] pb-3 flex gap-2 justify-between items-center">
@@ -431,7 +331,7 @@ function ProductData() {
                     Brand
                   </span>
                   <span className="flex justify-start items-center">
-                    {product.brand}
+                    {productById?.brand?.name}
                   </span>
                 </h2>
                 <h2 className="border-b border-[var(--stroke)] pb-3 flex gap-2 justify-between items-center">
@@ -440,8 +340,8 @@ function ProductData() {
                     Size (L X W X H)
                   </span>
                   <span className="flex justify-start items-center">
-                    {product.size.length} X {product.size.width} X{" "}
-                    {product.size.height} cm
+                    {productById.size?.length} X {productById.size?.width} X{" "}
+                    {productById.size?.height} cm
                   </span>
                 </h2>
                 <h2 className="border-b border-[var(--stroke)] pb-3 flex gap-2 justify-between items-center">
@@ -450,7 +350,7 @@ function ProductData() {
                     Colors
                   </span>
                   <p className="flex justify-start items-center">
-                    {product.colors.join(", ")}
+                    {productById?.color?.join(", ")}
                   </p>
                 </h2>
               </div>
@@ -458,17 +358,6 @@ function ProductData() {
           </div>
         </div>
       </div>
-      <CatalogueCarousel catalogues={product.catalogues} />
-      <MoreProducts
-        suggestedProducts={suggestedProducts}
-        name={"More from Bath Co"}
-      />
-      <ShareModal
-        isOpen={shareOpen}
-        onClose={() => setShareOpen(false)}
-        url={window.location.href}
-        title={product.title}
-      />
     </div>
   );
 }

@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { FilterSection } from "./FilterSection";
 import { Slider } from "primereact/slider";
 
-function PriceFilter() {
-  const [priceRange, setPriceRange] = useState([0, 1000000]);
+function PriceFilter({ priceRange, setPriceRange }) {
   return (
     <FilterSection title="Pricing" sectionKey="price">
       <div className="mt-8 relative">

@@ -7,15 +7,8 @@ import logoBlack from "../../assets/Homepage/Banner/logoBlack.png";
 import ProductCard from "../../Components/ProductCard";
 import { MultiSelect } from "primereact/multiselect";
 import { State } from "country-state-city";
-
-const dummyProducts = Array.from({ length: 400 }).map((_, i) => ({
-  id: i + 1,
-  title: "Kohler Memoirs Pedestal Sink",
-  price: "₹4,000",
-  location: "New York, NY",
-  category: "Bathroom",
-  image: `https://picsum.photos/500/500?random=${i + 1}`,
-}));
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProducts } from "../ProductsAPI";
 
 const PRODUCTS_PER_PAGE = 24;
 
@@ -23,15 +16,86 @@ export default function ProductsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [showFilters, setShowFilters] = useState(true);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
-  const totalPages = Math.ceil(dummyProducts.length / PRODUCTS_PER_PAGE);
   const [, navigate] = useLocation();
   const [locationArea, setLocationArea] = useState([]);
   const [sortBy, setSortBy] = useState("");
   const [selectedLocations, setSelectedLocations] = useState([]);
-  const paginatedProducts = dummyProducts.slice(
-    (currentPage - 1) * PRODUCTS_PER_PAGE,
-    currentPage * PRODUCTS_PER_PAGE,
-  );
+  const [selectedSubCategories, setSelectedSubCategories] = useState([]);
+  const [selectedSubSubCategories, setSelectedSubSubCategories] = useState([]);
+  const [selectedColors, setSelectedColors] = useState([]);
+  const [selectedMaterial, setSelectedMaterial] = useState([]);
+  const [selectedBrand, setSelectedBrand] = useState([]);
+  const [lengthRange, setLengthRange] = useState([0, 200]);
+  const [widthRange, setWidthRange] = useState([0, 200]);
+  const [heightRange, setHeightRange] = useState([0, 200]);
+  const [weightRange, setWeightRange] = useState([0, 200]);
+  const [priceRange, setPriceRange] = useState([0, 1000000]);
+  const dispatch = useDispatch();
+  const { products, total, loading } = useSelector((state) => state.product);
+
+  const totalPages = Math.ceil(total / PRODUCTS_PER_PAGE);
+
+  useEffect(() => {
+    const payload = {
+      page: currentPage,
+      limit: 24,
+      sortBy,
+      locations: selectedLocations,
+      subCategories: selectedSubCategories,
+      subSubCategories: selectedSubSubCategories,
+      brands: selectedBrand,
+      materials: selectedMaterial,
+      colors: selectedColors,
+    };
+
+    if (priceRange[0] !== 0) payload.minPrice = priceRange[0];
+    if (priceRange[1] !== 1000000) payload.maxPrice = priceRange[1];
+
+    if (lengthRange[0] !== 0) payload.minLength = lengthRange[0];
+    if (lengthRange[1] !== 200) payload.maxLength = lengthRange[1];
+
+    if (widthRange[0] !== 0) payload.minWidth = widthRange[0];
+    if (widthRange[1] !== 200) payload.maxWidth = widthRange[1];
+
+    if (heightRange[0] !== 0) payload.minHeight = heightRange[0];
+    if (heightRange[1] !== 200) payload.maxHeight = heightRange[1];
+
+    if (weightRange[0] !== 0) payload.minWeight = weightRange[0];
+    if (weightRange[1] !== 200) payload.maxWeight = weightRange[1];
+
+    dispatch(fetchProducts(payload));
+  }, [
+    dispatch,
+    currentPage,
+    sortBy,
+    selectedLocations,
+    selectedSubCategories,
+    selectedSubSubCategories,
+    selectedBrand,
+    selectedMaterial,
+    selectedColors,
+    priceRange,
+    lengthRange,
+    widthRange,
+    heightRange,
+    weightRange,
+  ]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [
+    selectedLocations,
+    selectedSubCategories,
+    selectedSubSubCategories,
+    selectedBrand,
+    selectedMaterial,
+    selectedColors,
+    priceRange,
+    lengthRange,
+    widthRange,
+    heightRange,
+    weightRange,
+  ]);
 
   useEffect(() => {
     // Load Indian states on mount
@@ -104,8 +168,28 @@ export default function ProductsPage() {
           <div className="hidden lg:block lg:w-1/4 px-4 sticky h-full max-h-[calc(100vh-0.5rem)] top-2 overscroll-contain overflow-scroll">
             <Filters
               locationArea={locationArea}
-              setSelectedLocations={setSelectedLocations}
               selectedLocations={selectedLocations}
+              setSelectedLocations={setSelectedLocations}
+              selectedSubCategories={selectedSubCategories}
+              setSelectedSubCategories={setSelectedSubCategories}
+              selectedSubSubCategories={selectedSubSubCategories}
+              setSelectedSubSubCategories={setSelectedSubSubCategories}
+              selectedColors={selectedColors}
+              setSelectedColors={setSelectedColors}
+              selectedMaterial={selectedMaterial}
+              setSelectedMaterial={setSelectedMaterial}
+              selectedBrand={selectedBrand}
+              setSelectedBrand={setSelectedBrand}
+              lengthRange={lengthRange}
+              setLengthRange={setLengthRange}
+              widthRange={widthRange}
+              setWidthRange={setWidthRange}
+              heightRange={heightRange}
+              setHeightRange={setHeightRange}
+              weightRange={weightRange}
+              setWeightRange={setWeightRange}
+              priceRange={priceRange}
+              setPriceRange={setPriceRange}
             />
           </div>
         )}
@@ -135,8 +219,28 @@ export default function ProductsPage() {
             <div className="pt-5 bg-white w-full px-6">
               <Filters
                 locationArea={locationArea}
-                setSelectedLocations={setSelectedLocations}
                 selectedLocations={selectedLocations}
+                setSelectedLocations={setSelectedLocations}
+                selectedSubCategories={selectedSubCategories}
+                setSelectedSubCategories={setSelectedSubCategories}
+                selectedSubSubCategories={selectedSubSubCategories}
+                setSelectedSubSubCategories={setSelectedSubSubCategories}
+                selectedColors={selectedColors}
+                setSelectedColors={setSelectedColors}
+                selectedMaterial={selectedMaterial}
+                setSelectedMaterial={setSelectedMaterial}
+                selectedBrand={selectedBrand}
+                setSelectedBrand={setSelectedBrand}
+                lengthRange={lengthRange}
+                setLengthRange={setLengthRange}
+                widthRange={widthRange}
+                setWidthRange={setWidthRange}
+                heightRange={heightRange}
+                setHeightRange={setHeightRange}
+                weightRange={weightRange}
+                setWeightRange={setWeightRange}
+                priceRange={priceRange}
+                setPriceRange={setPriceRange}
               />
             </div>
           </div>
@@ -193,57 +297,65 @@ export default function ProductsPage() {
           </div>
 
           {/* Products Grid */}
-          <div
-            className={`grid grid-cols-2 ${showFilters ? "sm:grid-cols-2 lg:grid-cols-3" : "sm:grid-cols-3 lg:grid-cols-4"} gap-6`}
-          >
-            <ProductCard paginatedProducts={paginatedProducts} />
-          </div>
+          {products?.length === 0 && !loading ? (
+            <div className="w-full text-center py-10 text-gray-500 text-lg">
+              No products found.
+            </div>
+          ) : (
+            <div
+              className={`grid grid-cols-2 ${showFilters ? "sm:grid-cols-2 lg:grid-cols-3" : "sm:grid-cols-3 lg:grid-cols-4"} gap-6`}
+            >
+              <ProductCard paginatedProducts={products} loader={loading} />
+            </div>
+          )}
 
           {/* ================= PAGINATION ================= */}
-          <div
-            className="flex justify-center items-center gap-2 mt-10 pb-10"
-            style={{
-              fontFamily: "DM Sans",
-            }}
-          >
-            <button
-              disabled={currentPage === 1}
-              onClick={() => setCurrentPage((prev) => prev - 1)}
-              className="px-1 lg:px-3 py-1 bg-white text-black flex items-center gap-2 rounded disabled:opacity-40 font-light"
+          {totalPages > 1 && (
+            <div
+              className="flex justify-center items-center gap-2 mt-10 pb-10"
+              style={{
+                fontFamily: "DM Sans",
+              }}
             >
-              <ChevronLeft className="[var(--stroke)]-1" />{" "}
-              <span className="hidden lg:block">Previous</span>
-            </button>
+              <button
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((prev) => prev - 1)}
+                className="px-1 lg:px-3 py-1 bg-white text-black flex items-center gap-2 rounded disabled:opacity-40 font-light"
+              >
+                <ChevronLeft className="[var(--stroke)]-1" />{" "}
+                <span className="hidden lg:block">Previous</span>
+              </button>
 
-            {getPages().map((page, index) =>
-              page === "..." ? (
-                <span key={index} className="px-2">
-                  ...
-                </span>
-              ) : (
-                <button
-                  key={index}
-                  onClick={() => setCurrentPage(page)}
-                  className={`px-3 py-1.5 lg:px-5 lg:py-2 rounded-lg text-black ${
-                    currentPage === page
-                      ? "bg-[var(--primary)] border border-[var(--stroke)]"
-                      : "bg-white"
-                  }`}
-                >
-                  {page}
-                </button>
-              ),
-            )}
+              {getPages().map((page, index) =>
+                page === "..." ? (
+                  <span key={index} className="px-2">
+                    ...
+                  </span>
+                ) : (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentPage(page)}
+                    className={`px-3 py-1.5 lg:px-5 lg:py-2 rounded-lg text-black ${
+                      currentPage === page
+                        ? "bg-[var(--primary)] border border-[var(--stroke)]"
+                        : "bg-white"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ),
+              )}
 
-            <button
-              disabled={currentPage === totalPages}
-              onClick={() => setCurrentPage((prev) => prev + 1)}
-              className="px-1 lg:px-3 py-1 bg-white text-black flex items-center gap-2 rounded disabled:opacity-40 font-light"
-            >
-              <span className="hidden lg:block">Next</span>{" "}
-              <ChevronRight className="[var(--stroke)]-1" />
-            </button>
-          </div>
+              <button
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage((prev) => prev + 1)}
+                className="px-1 lg:px-3 py-1 bg-white text-black flex items-center gap-2 rounded disabled:opacity-40 font-light"
+              >
+                <span className="hidden lg:block">Next</span>{" "}
+                <ChevronRight className="[var(--stroke)]-1" />
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

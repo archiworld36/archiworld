@@ -4,12 +4,24 @@ import { InputText } from "primereact/inputtext";
 import { useSelector } from "react-redux";
 import { Search } from "lucide-react";
 
-function BrandFilter() {
+function BrandFilter({ selectedBrand, setSelectedBrand }) {
   const { brandOptions = [] } = useSelector((state) => state.masterData);
   const [searchTermBrand, setSearchTermBrand] = useState("");
   const filteredBrands = brandOptions.filter((item) =>
     item.name.toLowerCase().includes(searchTermBrand.toLowerCase()),
   );
+
+  const handleBrandClick = (id) => {
+    setSelectedBrand((prev) => {
+      if (prev.includes(id)) {
+        // remove if already selected
+        return prev.filter((c) => c !== id);
+      } else {
+        // add if not selected
+        return [...prev, id];
+      }
+    });
+  };
   return (
     <FilterSection title="Brand" sectionKey="brand">
       <div className="mt-5 relative">
@@ -29,11 +41,19 @@ function BrandFilter() {
           <li className="text-[var(--secondary)]">No brand found</li>
         ) : (
           filteredBrands.map((item) => (
-            <li key={item._id}>
+            <li
+              key={item._id}
+              onClick={() => handleBrandClick(item._id)}
+              className="cursor-pointer"
+            >
               <div className="flex justify-between items-center cursor-pointer">
                 <span className="flex gap-2">{item.name}</span>
 
-                <input type="checkbox" className="w-5 h-5" />
+                <input
+                  type="checkbox"
+                  className="w-5 h-5"
+                  checked={selectedBrand.includes(item._id)}
+                />
               </div>
             </li>
           ))

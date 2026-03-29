@@ -4,12 +4,23 @@ import { InputText } from "primereact/inputtext";
 import { useSelector } from "react-redux";
 import { Search } from "lucide-react";
 
-function MaterialFilter() {
+function MaterialFilter({ selectedMaterial, setSelectedMaterial }) {
   const [searchTerm, setSearchTerm] = useState("");
   const { materialOptions = [] } = useSelector((state) => state.masterData);
   const filteredMaterials = materialOptions.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
+  const handleMaterialClick = (id) => {
+    setSelectedMaterial((prev) => {
+      if (prev.includes(id)) {
+        // remove if already selected
+        return prev.filter((c) => c !== id);
+      } else {
+        // add if not selected
+        return [...prev, id];
+      }
+    });
+  };
   return (
     <FilterSection title="Material" sectionKey="material">
       <div className="mt-5 relative">
@@ -29,11 +40,18 @@ function MaterialFilter() {
           <li className="text-[var(--secondary)]">No materials found</li>
         ) : (
           filteredMaterials.map((item) => (
-            <li key={item._id}>
+            <li
+              key={item._id}
+              onClick={() => handleMaterialClick(item._id)}
+              className="cursor-pointer"
+            >
               <div className="flex justify-between items-center cursor-pointer">
                 <span className="flex gap-2">{item.name}</span>
-
-                <input type="checkbox" className="w-5 h-5" />
+                <input
+                  type="checkbox"
+                  className="w-5 h-5"
+                  checked={selectedMaterial.includes(item._id)}
+                />
               </div>
             </li>
           ))

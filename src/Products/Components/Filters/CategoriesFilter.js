@@ -4,7 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchSubCategory, fetchSubSubCategory } from "../masterDataAPI";
 import { ChevronDown, ChevronRight } from "lucide-react";
 
-function CategoriesFilter() {
+function CategoriesFilter({
+  selectedSubCategories,
+  setSelectedSubCategories,
+  selectedSubSubCategories,
+  setSelectedSubSubCategories,
+}) {
   const {
     categories = [],
     loadingCategories = false,
@@ -16,8 +21,6 @@ function CategoriesFilter() {
   const dispatch = useDispatch();
   const [openCategoryId, setOpenCategoryId] = useState(null);
   const [openSubCategoryId, setOpenSubCategoryId] = useState(null);
-  const [selectedSubCategories, setSelectedSubCategories] = useState([]);
-  const [selectedSubSubCategories, setSelectedSubSubCategories] = useState([]);
 
   const handleCategoryClick = async (id) => {
     if (openCategoryId === id) {
@@ -105,9 +108,12 @@ function CategoriesFilter() {
                       return (
                         <li key={sub._id} className="flex flex-col pt-5">
                           <div
-                            onClick={() =>
-                              hasSubSub && handleSubCategoryClick(sub._id)
-                            }
+                            onClick={() => {
+                              if (hasSubSub) {
+                                handleSubCategoryClick(sub._id);
+                              }
+                              handleSubCategoryChange(sub._id); // ALWAYS select on row click
+                            }}
                             className="flex justify-between items-center cursor-pointer"
                           >
                             <span>{sub.name}</span>
@@ -124,9 +130,6 @@ function CategoriesFilter() {
                                 checked={selectedSubCategories.includes(
                                   sub._id,
                                 )}
-                                onChange={() =>
-                                  handleSubCategoryChange(sub._id)
-                                }
                                 className="w-5 h-5"
                               />
                             )}
@@ -148,7 +151,10 @@ function CategoriesFilter() {
                                 subSubs.map((subsub) => (
                                   <li
                                     key={subsub._id}
-                                    className="flex justify-between items-center pt-3"
+                                    onClick={() =>
+                                      handleSubSubCategoryChange(subsub._id)
+                                    }
+                                    className="flex justify-between items-center pt-3 cursor-pointer"
                                   >
                                     <span>{subsub.name}</span>
 
@@ -157,9 +163,6 @@ function CategoriesFilter() {
                                       checked={selectedSubSubCategories.includes(
                                         subsub._id,
                                       )}
-                                      onChange={() =>
-                                        handleSubSubCategoryChange(subsub._id)
-                                      }
                                       className="w-5 h-5"
                                     />
                                   </li>
