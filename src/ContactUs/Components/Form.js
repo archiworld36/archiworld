@@ -58,7 +58,7 @@ function Form() {
       }
     } catch (error) {
       console.error(error);
-      toast.success("Something went wrong ❌");
+      toast.error("Something went wrong ❌");
       setLoading(false);
     }
   };

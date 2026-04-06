@@ -25,9 +25,15 @@ function Navbar({ color, searchKey }) {
   const [, navigate] = useLocation();
 
   const handleSearch = () => {
-    if (!searchTerm.trim()) return;
+    if (searchTerm.trim()) {
+      navigate(`/products?searchTerm=${encodeURIComponent(searchTerm)}`, {
+        replace: false,
+      });
+    }
+    if (!searchTerm.trim()) {
+      navigate(`/products`);
+    }
 
-    navigate(`/products?searchTerm=${encodeURIComponent(searchTerm)}`);
     setSearch(false); // optional (close mobile search)
     setOpen(false);
   };
