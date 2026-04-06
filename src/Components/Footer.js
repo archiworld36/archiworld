@@ -108,7 +108,7 @@ export default function Footer({ topStat = false }) {
         {/* Right Section */}
         <div className="hidden lg:flex flex-col w-[75%]">
           <MenuItem label="Advertise with us" location="/contact-us" />
-          <MenuItem label="Help" location="/" />
+          <MenuItem label="Help" location="/contact-us" />
           <MenuItem label="About Us" location="/about-us" />
           <MenuItem label="Complaints" location="/contact-us" />
           <MenuItem label="Jobs & Careers" location="/contact-us" />

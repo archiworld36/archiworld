@@ -6,7 +6,7 @@ import ShareModal from "../../Components/Share";
 function TopNavigation({ vendor }) {
   const [, navigate] = useLocation();
   const [shareOpen, setShareOpen] = useState(false);
-  const phoneNumber = vendor.mobile.replace(/\D/g, ""); // remove spaces etc
+  const phoneNumber = vendor?.mobile?.replace(/\D/g, ""); // remove spaces etc
 
   const callNumber = () => {
     window.location.href = `tel:+91${phoneNumber}`;
@@ -48,7 +48,7 @@ function TopNavigation({ vendor }) {
               <span className="font-light text-[var(--secondary)]">
                 Service Area -{" "}
               </span>
-              {vendor.serviceState.join(", ")}
+              {vendor?.serviceState?.join(", ")}
             </p>
           </div>
         </div>
@@ -60,7 +60,10 @@ function TopNavigation({ vendor }) {
             <Phone size={16} />
             Contact
           </button>
-          <button className="flex gap-2 text-sm px-3 py-2 justify-center items-center text-black bg-[var(--primary)] rounded-full">
+          <button
+            onClick={() => window.open(vendor?.website, "_blank")}
+            className="flex gap-2 text-sm px-3 py-2 justify-center items-center text-black bg-[var(--primary)] rounded-full"
+          >
             <Globe size={16} />
             Visit Website
           </button>

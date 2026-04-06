@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
-import { Send } from "lucide-react";
+import { Loader2, Send } from "lucide-react";
+import BASEURL from "../../BaseUrl";
+import { toast } from "react-toastify";
 function Form() {
   const [formData, setFormData] = useState({
     enquiryType: null,
@@ -10,29 +12,55 @@ function Form() {
     lastName: "",
     email: "",
     phone: "",
-    country: null,
     message: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const enquiryOptions = [
-    { label: "General Enquiry", value: "general" },
-    { label: "Product Enquiry", value: "product" },
-    { label: "Support", value: "support" },
-  ];
-
-  const countryOptions = [
-    { label: "India", value: "india" },
-    { label: "USA", value: "usa" },
-    { label: "UK", value: "uk" },
+    { label: "General Enquiry", value: "General Enquiry" },
+    { label: "Sales", value: "Sales" },
+    { label: "Technical Support", value: "Technical Support" },
+    { label: "Jobs & Careers", value: "Jobs & Careers" },
+    { label: "Complaints", value: "Complaints" },
   ];
 
   const handleChange = (e, name) => {
     setFormData({ ...formData, [name]: e.value ?? e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    setLoading(true);
+    try {
+      const res = await fetch(`${BASEURL}/api/contact-us`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        toast.success("Form submitted successfully ✅");
+        setFormData({
+          enquiryType: null,
+          firstName: "",
+          lastName: "",
+          email: "",
+          phone: "",
+          message: "",
+        });
+        setLoading(false);
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.success("Something went wrong ❌");
+      setLoading(false);
+    }
   };
   return (
     <div className="px-[3vw] lg:px-[2.34375vw] flex flex-col lg:flex-row justify-between lg:items-center lg:gap-[3vw]">
@@ -201,21 +229,6 @@ function Form() {
                 className="shadow-none px-5 rounded-full py-3"
               />
             </div>
-            {/* Country */}
-            <div className="flex flex-col w-full">
-              <label className="block mb-2">
-                Country <span className="text-red-600">*</span>
-              </label>
-              <Dropdown
-                value={formData.country}
-                required
-                options={countryOptions}
-                onChange={(e) => handleChange(e, "country")}
-                placeholder="Select country"
-                checkmark
-                className="shadow-none px-5 rounded-full py-1"
-              />
-            </div>
           </div>
 
           {/* Message */}
@@ -234,10 +247,20 @@ function Form() {
           {/* Submit Button */}
           <button
             type="submit"
-            className="flex gap-1 bg-black text-white justify-center items-center px-10 py-3 mt-7 border-black border lg:hover:bg-white lg:hover:text-black transition-all ease-in duration-300"
+            disabled={loading}
+            className="flex gap-1 bg-black text-white justify-center items-center px-10 py-3 mt-7 border-black border lg:hover:bg-white lg:hover:text-black transition-all ease-in duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            <Send />
-            Send
+            {loading ? (
+              <>
+                <Loader2 className="animate-spin" />
+                Sending...
+              </>
+            ) : (
+              <>
+                <Send />
+                Send
+              </>
+            )}
           </button>
         </form>
       </div>

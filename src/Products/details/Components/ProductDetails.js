@@ -169,7 +169,7 @@ function ProductData({ productById, setShareOpen }) {
               <img
                 src={activeImage}
                 alt=""
-                className="w-full aspect-[1.4/1] object-cover"
+                className="w-full aspect-[1/1] object-cover"
               />
               <button
                 onClick={handlePrev}
@@ -203,7 +203,7 @@ function ProductData({ productById, setShareOpen }) {
             </div>
           </div>
 
-          <div className="w-full lg:w-[80%] space-y-4 lg:space-y-6">
+          <div className="w-full space-y-4 lg:space-y-6">
             <div>
               <h2 className="text-[clamp(12px,3vw,40px)] sm:text-[clamp(12px,2.3vw,30px)] lg:text-[clamp(10px,1.2vw,40px)] font-semibold">
                 Details

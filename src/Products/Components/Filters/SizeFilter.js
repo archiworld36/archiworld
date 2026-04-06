@@ -9,8 +9,6 @@ function SizeFilter({
   setWidthRange,
   heightRange,
   setHeightRange,
-  weightRange,
-  setWeightRange,
 }) {
   return (
     <FilterSection title="Size" sectionKey="size">
@@ -170,59 +168,6 @@ function SizeFilter({
             />
             <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-[clamp(10px,3vw,40px)] sm:text-[clamp(12px,1.9vw,30px)] lg:text-[clamp(10px,1vw,40px)]">
               cm
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="mt-8 relative">
-        <label className="text-[clamp(10px,3vw,40px)] sm:text-[clamp(12px,1.9vw,30px)] lg:text-[clamp(10px,1vw,40px)] font-normal">
-          Weight
-        </label>
-        <Slider
-          value={weightRange}
-          onChange={(e) => {
-            const [min, max] = e.value;
-            if (min <= max) {
-              setWeightRange([min, max]);
-            }
-          }}
-          range
-          min={0}
-          max={200}
-          className="mt-6"
-        />
-        <div className="flex gap-3 items-center justify-center mt-8">
-          <div className="relative">
-            <input
-              type="number"
-              value={weightRange[0]}
-              onChange={(e) => {
-                const value = Number(e.target.value);
-                if (value <= weightRange[1]) {
-                  setWeightRange([weightRange[1], value]);
-                }
-              }}
-              className="pr-12 pl-5 w-full py-2 border border-[var(--stroke)] rounded-none text-xl focus:outline-none shadow-none bg-white"
-            />
-            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-[clamp(10px,3vw,40px)] sm:text-[clamp(12px,1.9vw,30px)] lg:text-[clamp(10px,1vw,40px)]">
-              Kg
-            </div>
-          </div>
-          <div className="h-0 border border-black w-4"></div>
-          <div className="relative">
-            <input
-              type="number"
-              value={weightRange[1]}
-              onChange={(e) => {
-                const value = Number(e.target.value);
-                if (value >= weightRange[0]) {
-                  setWeightRange([weightRange[0], value]);
-                }
-              }}
-              className="pr-12 pl-5 w-full py-2 border border-[var(--stroke)] rounded-none text-xl focus:outline-none shadow-none bg-white"
-            />
-            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-[clamp(10px,3vw,40px)] sm:text-[clamp(12px,1.9vw,30px)] lg:text-[clamp(10px,1vw,40px)]">
-              Kg
             </div>
           </div>
         </div>

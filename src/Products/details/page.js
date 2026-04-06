@@ -29,8 +29,10 @@ function ProductDetails() {
   }, [dispatch, id]);
 
   useEffect(() => {
-    if (id) fetchProductDetails();
-    fetchSuggested();
+    if (id) {
+      fetchProductDetails();
+      fetchSuggested();
+    }
   }, [fetchProductDetails, id, fetchSuggested]);
 
   if (loadingProductDetailsFetch) {
@@ -49,12 +51,16 @@ function ProductDetails() {
       <Navbar color={"black"} />
       <div className="px-[3vw] lg:px-[2.34375vw]">
         <ProductData productById={productById} setShareOpen={setShareOpen} />
-        <CatalogueCarousel catalogues={productById?.catalogues} />
-        <MoreProducts
-          suggestedProducts={suggestedProduct}
-          loader={loadingSuggestedProductFetch}
-          name={`More from ${productById?.user?.name}`}
-        />
+        {productById?.catalogues?.length > 0 && (
+          <CatalogueCarousel catalogues={productById?.catalogues} />
+        )}
+        {suggestedProduct.length > 1 && (
+          <MoreProducts
+            suggestedProducts={suggestedProduct}
+            loader={loadingSuggestedProductFetch}
+            name={`More from ${productById?.user?.name}`}
+          />
+        )}
         <ShareModal
           isOpen={shareOpen}
           onClose={() => setShareOpen(false)}

@@ -33,8 +33,6 @@ function Filters({
   setWidthRange,
   heightRange,
   setHeightRange,
-  weightRange,
-  setWeightRange,
   priceRange,
   setPriceRange,
 }) {
@@ -89,8 +87,6 @@ function Filters({
         setWidthRange={setWidthRange}
         heightRange={heightRange}
         setHeightRange={setHeightRange}
-        weightRange={weightRange}
-        setWeightRange={setWeightRange}
       />
       {/* Pricing */}
       <PriceFilter priceRange={priceRange} setPriceRange={setPriceRange} />

@@ -124,3 +124,19 @@ export const fetchSuggestedProducts = createAsyncThunk(
     }
   },
 );
+
+export const fetchSuggestedUserProducts = createAsyncThunk(
+  "product/fetchSuggestedUserProducts",
+  async (productId, thunkAPI) => {
+    try {
+      const response = await axios.get(
+        `${BASEURL}/api/suggested-user-products/${productId}`,
+      );
+      return response.data.suggestedProduct;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to fetch suggested products",
+      );
+    }
+  },
+);

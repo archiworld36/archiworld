@@ -18,11 +18,20 @@ function MenuItem({ label, location }) {
   );
 }
 
-function Navbar({ color }) {
-  const [searchTerm, setSearchTerm] = useState("");
+function Navbar({ color, searchKey }) {
+  const [searchTerm, setSearchTerm] = useState(searchKey);
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState(false);
   const [, navigate] = useLocation();
+
+  const handleSearch = () => {
+    if (!searchTerm.trim()) return;
+
+    navigate(`/products?searchTerm=${encodeURIComponent(searchTerm)}`);
+    setSearch(false); // optional (close mobile search)
+    setOpen(false);
+  };
+
   return (
     <div
       className={`w-full h-[70px] ${open || search ? "fixed z-20" : "relative"} lg:h-[6vw] px-[3vw] lg:px-[2.34375vw] pt-[20px] flex gap-[1.5625vw]`}
@@ -55,10 +64,18 @@ function Navbar({ color }) {
             placeholder="What are you looking for?"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className={`pl-4 w-full shadow-none bg-transparent ${color === "white" ? "placeholder:text-[var(--primary)]" : "placeholder:text-black"}`}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleSearch();
+            }}
+            className={`pl-4 pr-4 w-full shadow-none bg-transparent ${color === "white" ? "placeholder:text-[var(--primary)]" : "placeholder:text-black"}`}
           />
         </div>
-        <button className={`text-white w-fit h-full bg-black`}>Search</button>
+        <button
+          onClick={handleSearch}
+          className={`text-white w-fit h-full bg-black`}
+        >
+          Search
+        </button>
       </div>
       <div className={`w-full h-full flex justify-end lg:hidden gap-4`}>
         {!search && (
@@ -103,7 +120,7 @@ function Navbar({ color }) {
         `}
       >
         <MenuItem label="Advertise with us" location="/contact-us" />
-        <MenuItem label="Help" location="/" />
+        <MenuItem label="Help" location="/contact-us" />
         <MenuItem label="About Us" location="/about-us" />
         <MenuItem label="Complaints" location="/contact-us" />
         <MenuItem label="Jobs & Careers" location="/contact-us" />
@@ -135,10 +152,18 @@ function Navbar({ color }) {
               placeholder="What are you looking for?"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className={`pl-4 w-full shadow-none bg-transparent placeholder:text-black`}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSearch();
+              }}
+              className={`pl-4 pr-4 w-full shadow-none bg-transparent placeholder:text-black`}
             />
           </div>
-          <button className={`text-white w-fit h-full bg-black`}>Search</button>
+          <button
+            onClick={handleSearch}
+            className={`text-white w-fit h-full bg-black`}
+          >
+            Search
+          </button>
         </div>
       </div>
       {(open || search) && (

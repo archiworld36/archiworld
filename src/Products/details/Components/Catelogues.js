@@ -44,7 +44,7 @@ export default function CatalogueCarousel({ catalogues }) {
       <div className="flex flex-col lg:flex-row gap-4 lg:gap-2 items-center justify-between w-full pb-[20px] sm:pb-[30px] lg:pb-[40px]">
         {/* Title */}
         <h2 className="w-full text-[clamp(20px,5vw,120px)] sm:text-[clamp(20px,5.5vw,120px)] lg:text-[clamp(20px,3.8vw,120px)] capitalize leading-tight font-medium font-[Poppins]">
-          Catalogues
+          Technical Details
         </h2>
 
         {/* Category Buttons */}

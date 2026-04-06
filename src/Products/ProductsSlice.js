@@ -5,6 +5,7 @@ import {
   fetchFeaturedProducts,
   fetchSuggestedProducts,
   fetchProducts,
+  fetchSuggestedUserProducts,
 } from "./ProductsAPI";
 
 export const productInitialState = {
@@ -67,6 +68,16 @@ const productSlice = createSlice({
         state.suggestedProduct = action.payload; // Set the product by id
       })
       .addCase(fetchSuggestedProducts.rejected, (state, action) => {
+        state.loadingSuggestedProductFetch = false;
+      })
+      .addCase(fetchSuggestedUserProducts.pending, (state) => {
+        state.loadingSuggestedProductFetch = true;
+      })
+      .addCase(fetchSuggestedUserProducts.fulfilled, (state, action) => {
+        state.loadingSuggestedProductFetch = false;
+        state.suggestedProduct = action.payload; // Set the product by id
+      })
+      .addCase(fetchSuggestedUserProducts.rejected, (state, action) => {
         state.loadingSuggestedProductFetch = false;
       });
   },

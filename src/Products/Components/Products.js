@@ -12,7 +12,7 @@ import { fetchProducts } from "../ProductsAPI";
 
 const PRODUCTS_PER_PAGE = 24;
 
-export default function ProductsPage() {
+export default function ProductsPage({searchTerm}) {
   const [currentPage, setCurrentPage] = useState(1);
   const [showFilters, setShowFilters] = useState(true);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
@@ -28,7 +28,6 @@ export default function ProductsPage() {
   const [lengthRange, setLengthRange] = useState([0, 200]);
   const [widthRange, setWidthRange] = useState([0, 200]);
   const [heightRange, setHeightRange] = useState([0, 200]);
-  const [weightRange, setWeightRange] = useState([0, 200]);
   const [priceRange, setPriceRange] = useState([0, 1000000]);
   const dispatch = useDispatch();
   const { products, total, loading } = useSelector((state) => state.product);
@@ -40,6 +39,7 @@ export default function ProductsPage() {
       page: currentPage,
       limit: 24,
       sortBy,
+      search: searchTerm,
       locations: selectedLocations,
       subCategories: selectedSubCategories,
       subSubCategories: selectedSubSubCategories,
@@ -60,9 +60,6 @@ export default function ProductsPage() {
     if (heightRange[0] !== 0) payload.minHeight = heightRange[0];
     if (heightRange[1] !== 200) payload.maxHeight = heightRange[1];
 
-    if (weightRange[0] !== 0) payload.minWeight = weightRange[0];
-    if (weightRange[1] !== 200) payload.maxWeight = weightRange[1];
-
     dispatch(fetchProducts(payload));
   }, [
     dispatch,
@@ -78,7 +75,7 @@ export default function ProductsPage() {
     lengthRange,
     widthRange,
     heightRange,
-    weightRange,
+    searchTerm,
   ]);
 
   useEffect(() => {
@@ -94,7 +91,7 @@ export default function ProductsPage() {
     lengthRange,
     widthRange,
     heightRange,
-    weightRange,
+    searchTerm,
   ]);
 
   useEffect(() => {
@@ -186,8 +183,6 @@ export default function ProductsPage() {
               setWidthRange={setWidthRange}
               heightRange={heightRange}
               setHeightRange={setHeightRange}
-              weightRange={weightRange}
-              setWeightRange={setWeightRange}
               priceRange={priceRange}
               setPriceRange={setPriceRange}
             />
@@ -237,8 +232,6 @@ export default function ProductsPage() {
                 setWidthRange={setWidthRange}
                 heightRange={heightRange}
                 setHeightRange={setHeightRange}
-                weightRange={weightRange}
-                setWeightRange={setWeightRange}
                 priceRange={priceRange}
                 setPriceRange={setPriceRange}
               />
