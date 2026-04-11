@@ -12,7 +12,7 @@ export default function MoreProducts({ suggestedProducts, name, loader }) {
 
       {/* Carousel */}
       <div className="overflow-hidden">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 transition-transform duration-500">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 transition-transform duration-500">
           <ProductCard paginatedProducts={suggestedProducts} loader={loader} />
         </div>
       </div>

@@ -7,6 +7,9 @@ import store from "./store";
 import "primereact/resources/themes/saga-blue/theme.css"; // or any other theme
 import "primereact/resources/primereact.min.css";
 import { PrimeReactProvider } from "primereact/api";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

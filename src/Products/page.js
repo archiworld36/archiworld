@@ -8,11 +8,17 @@ import { useSearchParams } from "wouter";
 function Products() {
   const [searchParams] = useSearchParams();
   const searchTerm = searchParams.get("searchTerm") || "";
+  const category = searchParams.get("category") || "";
+  const subCategory = searchParams.get("subCategory") || "";
   return (
     <div>
       <Navbar color={"black"} searchKey={searchTerm} />
       <ProductsBanner />
-      <ProductsPage searchTerm={searchTerm} />
+      <ProductsPage
+        searchTerm={searchTerm}
+        category={category}
+        subCategory={subCategory}
+      />
       <Footer />
     </div>
   );

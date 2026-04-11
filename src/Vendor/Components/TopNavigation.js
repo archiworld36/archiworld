@@ -36,15 +36,15 @@ function TopNavigation({ vendor }) {
           />
           <div>
             <div className="flex gap-8 items-center">
-              <h3 className="text-[clamp(12px,3vw,40px)] sm:text-[clamp(12px,2.3vw,30px)] lg:text-[clamp(10px,1.2vw,40px)]">
+              <h3 className="text-[clamp(12px,3vw,40px)] sm:text-[clamp(10px,1.7vw,30px)] lg:text-[clamp(10px,1.2vw,40px)]">
                 {vendor.name}
               </h3>
-              <h2 className="flex items-center text-[clamp(12px,2.5vw,40px)] sm:text-[clamp(12px,2vw,30px)] lg:text-[clamp(10px,1vw,40px)] font-light">
+              <h2 className="flex items-center text-[clamp(10px,2.5vw,40px)] sm:text-[clamp(12px,1.7vw,30px)] lg:text-[clamp(10px,1vw,40px)] font-light">
                 <MapPin size={16} />
                 {vendor.city}, {vendor.state}
               </h2>
             </div>
-            <p className="text-[clamp(12px,2.5vw,40px)] sm:text-[clamp(12px,2vw,30px)] lg:text-[clamp(10px,1vw,40px)]">
+            <p className="text-[clamp(12px,2.5vw,40px)] sm:text-[clamp(10px,1.7vw,30px)] lg:text-[clamp(10px,1vw,40px)]">
               <span className="font-light text-[var(--secondary)]">
                 Service Area -{" "}
               </span>
@@ -60,13 +60,15 @@ function TopNavigation({ vendor }) {
             <Phone size={16} />
             Contact
           </button>
-          <button
-            onClick={() => window.open(vendor?.website, "_blank")}
-            className="flex gap-2 text-sm px-3 py-2 justify-center items-center text-black bg-[var(--primary)] rounded-full"
-          >
-            <Globe size={16} />
-            Visit Website
-          </button>
+          {vendor?.website && (
+            <button
+              onClick={() => window.open(vendor?.website, "_blank")}
+              className="flex gap-2 text-sm px-3 py-2 justify-center items-center text-black bg-[var(--primary)] rounded-full"
+            >
+              <Globe size={16} />
+              Visit Website
+            </button>
+          )}
           <button
             onClick={() => setShareOpen(true)}
             className="flex gap-2 text-sm px-3 py-2 justify-center items-center text-black bg-[var(--primary)] rounded-full"

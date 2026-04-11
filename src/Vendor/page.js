@@ -8,6 +8,7 @@ import { useParams } from "wouter";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchVendorById } from "./VendorAPI";
 import { fetchSuggestedUserProducts } from "../Products/ProductsAPI";
+import CategoriesCrousel from "../Components/CategoriesCrousel";
 
 function VendorDetails() {
   const { id } = useParams();
@@ -56,12 +57,25 @@ function VendorDetails() {
         className="w-full aspect-[3.959/1] object-cover"
       />
       <About about={vendorById.about} />
-      {suggestedProduct.length > 1 && (
+      {vendorById?.category?.length > 0 && (
+        <CategoriesCrousel
+          name={`Solutions ${vendorById?.name}`}
+          item={vendorById?.category}
+          navi={true}
+        />
+      )}
+      {vendorById?.subCategories?.length > 0 && (
+        <CategoriesCrousel
+          name={`Collections ${vendorById?.name}`}
+          item={vendorById?.subCategories}
+        />
+      )}
+      {suggestedProduct?.length > 1 && (
         <div className="flex flex-1 relative px-[3vw] lg:px-[2.34375vw] pb-10 gap-[2.8vw] lg:gap-[2.2vw]">
           <MoreProducts
             suggestedProducts={suggestedProduct}
             loader={loadingSuggestedProductFetch}
-            name={`Products by ${vendorById.name}`}
+            name={`Products by ${vendorById?.name}`}
           />
         </div>
       )}

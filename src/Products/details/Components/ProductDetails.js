@@ -8,7 +8,7 @@ import {
   ChevronLeft,
   ChevronRight,
   MessageCircle,
-  Globe,
+  // Globe,
   Dot,
 } from "lucide-react";
 import { useLocation } from "wouter";
@@ -273,19 +273,19 @@ function ProductData({ productById, setShareOpen }) {
                 <MessageCircle className="w-6 h-6 stroke-1.5" />
                 Connect on WhatsApp
               </button>
-              <button
-                onClick={callNumber}
-                className="w-full flex gap-2 justify-center items-center text-black box-border border border-[var(--stroke)] rounded-full"
-              >
-                <Phone className="w-6 h-6 stroke-1.5" />
-                Contact
-              </button>
+
               <div className="flex gap-3">
-                <button className="w-full flex text-nowrap px-0 gap-2 justify-center items-center text-black box-border border border-[var(--stroke)] rounded-full">
+                {/* <button className="w-full flex text-nowrap px-0 gap-2 justify-center items-center text-black box-border border border-[var(--stroke)] rounded-full">
                   <Globe size={16} />
                   Dealers Near You
+                </button> */}
+                <button
+                  onClick={callNumber}
+                  className="w-full flex gap-2 justify-center items-center text-black box-border border border-[var(--stroke)] rounded-full"
+                >
+                  <Phone className="w-6 h-6 stroke-1.5" />
+                  Contact
                 </button>
-
                 <button
                   onClick={() => setShareOpen(true)}
                   className="w-full flex text-nowrap px-0 gap-2 justify-center items-center text-black box-border border border-[var(--stroke)] rounded-full"

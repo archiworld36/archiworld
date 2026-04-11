@@ -5,15 +5,7 @@ import { useLocation } from "wouter";
 export default function CircularWheel() {
   const { categories = [] } = useSelector((state) => state.masterData);
   const [, navigate] = useLocation();
-  const images = [
-    "https://assets.codepen.io/756881/amys-1.jpg",
-    "https://assets.codepen.io/756881/amys-2.jpg",
-    "https://assets.codepen.io/756881/amys-3.jpg",
-    "https://archiworld-files.s3.ap-south-1.amazonaws.com/categories/banner/0ec07c75-5765-4ae4-93b4-7bb05e24ebc1-360_F_126394058_6VKelLGUvMBzvKC9WbgHabZ5eLrNssup.jpg",
-    "https://assets.codepen.io/756881/amys-5.jpg",
-    "https://assets.codepen.io/756881/amys-6.jpg",
-    "https://assets.codepen.io/756881/amys-7.jpg",
-  ];
+  const category = categories.filter((item) => item.bannerImage); // keep only items having bannerImage
 
   // fixed layout (source of truth)
   const rotations = [-45, -30, -15, 0, 15, 30, 45];
@@ -27,18 +19,18 @@ export default function CircularWheel() {
     if (hover) return;
 
     const id = setInterval(() => {
-      setIndex((prev) => (prev + 1) % images.length);
+      setIndex((prev) => (prev + 1) % category.length);
     }, 2500);
 
     return () => clearInterval(id);
-  }, [hover, images.length]);
+  }, [hover, category.length]);
 
   return (
     <div className="w-full pt-4 pb-[20vw] overflow-hidden flex justify-center">
       <div className="relative flex gap-[10vw] sm:gap-[7vw] lg:gap-[4vw] pt-6">
         {rotations.map((_, slotIndex) => {
-          const imgIndex = (index + slotIndex) % images.length;
-
+          const imgIndex = (index + slotIndex) % category.length;
+          const img = category[imgIndex];
           return (
             <div
               onMouseEnter={() => setHover(true)}
@@ -64,34 +56,29 @@ export default function CircularWheel() {
                 `,
               }}
             >
-              {categories
-                .filter((item) => item.bannerImage) // keep only items having bannerImage
-                .map((img, i) => (
-                  <div
-                    key={i}
-                    onClick={() => navigate(`/products?category=${img._id}`)}
-                    className={`absolute inset-0 w-full h-full cursor-pointer transition-opacity duration-300 ease-in-out ${
-                      i === imgIndex ? "opacity-100" : "opacity-0"
-                    }`}
-                  >
-                    {/* Card Image */}
-                    <div className="overflow-hidden w-full h-full relative rounded-3xl">
-                      <img
-                        src={img.bannerImage}
-                        alt=""
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute bottom-0 left-0 w-full px-6 py-6 h-1/3 flex flex-col justify-end gap-1 text-white transition-all bg-gradient-to-t from-black/80 via-black/20 to-transparent backdrop-blur-[1px]">
-                        <h3
-                          style={{ fontFamily: "Playfair Display" }}
-                          className="text-[clamp(10px,1.5vw,40px)] line-clamp-1"
-                        >
-                          {img.name}
-                        </h3>
-                      </div>
-                    </div>
+              <div
+                className={`absolute inset-0 w-full h-full cursor-pointer transition-opacity duration-300 ease-in-out`}
+              >
+                {/* Card Image */}
+                <div
+                  onClick={() => navigate(`/products?category=${img?._id}`)}
+                  className="overflow-hidden w-full h-full relative rounded-3xl"
+                >
+                  <img
+                    src={img?.bannerImage}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute bottom-0 left-0 w-full px-6 py-6 h-1/3 flex flex-col justify-end gap-1 text-white transition-all bg-gradient-to-t from-black/80 via-black/20 to-transparent backdrop-blur-[1px]">
+                    <h3
+                      style={{ fontFamily: "Playfair Display" }}
+                      className="text-[clamp(10px,1.5vw,40px)] line-clamp-1"
+                    >
+                      {img?.name}
+                    </h3>
                   </div>
-                ))}
+                </div>
+              </div>
             </div>
           );
         })}

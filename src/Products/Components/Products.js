@@ -12,7 +12,7 @@ import { fetchProducts } from "../ProductsAPI";
 
 const PRODUCTS_PER_PAGE = 24;
 
-export default function ProductsPage({searchTerm}) {
+export default function ProductsPage({ searchTerm, category, subCategory }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [showFilters, setShowFilters] = useState(true);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
@@ -41,6 +41,8 @@ export default function ProductsPage({searchTerm}) {
       sortBy,
       search: searchTerm,
       locations: selectedLocations,
+      category: category,
+      subCategory: subCategory,
       subCategories: selectedSubCategories,
       subSubCategories: selectedSubSubCategories,
       brands: selectedBrand,
@@ -66,6 +68,8 @@ export default function ProductsPage({searchTerm}) {
     currentPage,
     sortBy,
     selectedLocations,
+    category,
+    subCategory,
     selectedSubCategories,
     selectedSubSubCategories,
     selectedBrand,
