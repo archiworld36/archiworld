@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight, Settings2, X } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Dropdown } from "primereact/dropdown";
 import Filters from "./Filters";
 import { useLocation } from "wouter";
@@ -9,10 +9,11 @@ import { MultiSelect } from "primereact/multiselect";
 import { State } from "country-state-city";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../ProductsAPI";
+import { useSearchParams } from "wouter";
 
 const PRODUCTS_PER_PAGE = 24;
 
-export default function ProductsPage({ searchTerm, category, subCategory }) {
+export default function ProductsPage({ searchTerm }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [showFilters, setShowFilters] = useState(true);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
@@ -33,7 +34,38 @@ export default function ProductsPage({ searchTerm, category, subCategory }) {
   const { products, total, loading } = useSelector((state) => state.product);
 
   const totalPages = Math.ceil(total / PRODUCTS_PER_PAGE);
+  const [searchParams] = useSearchParams();
+  const searchParamsString = searchParams.toString();
+  const currentCategory = searchParams.get("category") || "";
+  const currentSubCategory = searchParams.get("subCategory") || "";
+  const isFirstRender = useRef(true);
 
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    const paramsObj = new URLSearchParams(searchParamsString);
+    const hasCategory =
+      paramsObj.get("category") || paramsObj.get("subCategory");
+    if (!hasCategory) return;
+    paramsObj.delete("category");
+    paramsObj.delete("subCategory");
+    navigate(`/products${paramsObj.toString()}`);
+  }, [
+    selectedLocations,
+    selectedSubCategories,
+    selectedSubSubCategories,
+    selectedBrand,
+    selectedMaterial,
+    selectedColors,
+    priceRange,
+    lengthRange,
+    widthRange,
+    heightRange,
+    navigate,
+    searchParamsString, // ✅ SAFE
+  ]);
   useEffect(() => {
     const payload = {
       page: currentPage,
@@ -41,8 +73,8 @@ export default function ProductsPage({ searchTerm, category, subCategory }) {
       sortBy,
       search: searchTerm,
       locations: selectedLocations,
-      category: category,
-      subCategory: subCategory,
+      category: currentCategory,
+      subCategory: currentSubCategory,
       subCategories: selectedSubCategories,
       subSubCategories: selectedSubSubCategories,
       brands: selectedBrand,
@@ -68,8 +100,8 @@ export default function ProductsPage({ searchTerm, category, subCategory }) {
     currentPage,
     sortBy,
     selectedLocations,
-    category,
-    subCategory,
+    currentCategory,
+    currentSubCategory,
     selectedSubCategories,
     selectedSubSubCategories,
     selectedBrand,
