@@ -62,7 +62,16 @@ function TopNavigation({ vendor }) {
           </button>
           {vendor?.website && (
             <button
-              onClick={() => window.open(vendor?.website, "_blank")}
+              onClick={() => {
+                let url = vendor.website;
+
+                // Add https if missing
+                if (!/^https?:\/\//i.test(url)) {
+                  url = "https://" + url;
+                }
+
+                window.open(url, "_blank", "noopener,noreferrer");
+              }}
               className="flex gap-2 text-sm px-3 py-2 justify-center items-center text-black bg-[var(--primary)] rounded-full"
             >
               <Globe size={16} />
