@@ -1,5 +1,5 @@
 import React from "react";
-import bannerBackground from "../assets/Error/background.png";
+
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 import { useLocation } from "wouter";
@@ -10,7 +10,9 @@ function NotFound() {
     <div className="min-h-screen">
       <div className="relative inset-0 w-full h-full">
         <img
-          src={bannerBackground}
+          src={
+            "https://archiworld-files.s3.ap-south-1.amazonaws.com/Website+Images/ErrorBackground.png"
+          }
           alt=""
           className="relative inset-0 w-full h-fit min-h-[58vh] sm:min-h-[75vh] object-cover -z-10"
         />

@@ -14,6 +14,15 @@ export default function FeaturedMarquee() {
   const { featuredProducts = [], loading } = useSelector(
     (state) => state.product,
   );
+
+  const getInitials = (fullName) => {
+    if (!fullName) return "";
+    const parts = fullName.trim().split(" ");
+    if (parts.length >= 2) {
+      return parts[0][0].toUpperCase() + parts[1][0].toUpperCase();
+    }
+    return parts[0].substring(0, 2).toUpperCase();
+  };
   const [, navigate] = useLocation();
 
   const fetchFeatured = useCallback(() => {
@@ -143,11 +152,17 @@ export default function FeaturedMarquee() {
                     onClick={() => navigate(`/vendor/${card.user._id}`)}
                     className="px-1 py-6 absolute opacity-0 translate-y-full group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 cursor-pointer"
                   >
-                    <img
-                      src={card.user.profileLogo}
-                      alt="logo"
-                      className="h-16 w-16 mb-2"
-                    />
+                    {typeof card.user.profileLogo === "string" ? (
+                      <img
+                        src={card.user.profileLogo}
+                        alt="Profile Logo"
+                        className="w-16 h-16 aspect-square object-cover"
+                      />
+                    ) : (
+                      <div className="!aspect-square p-2 w-16 h-16 bg-black flex items-center justify-center text-white font-semibold leading-none">
+                        {getInitials(card.user.name)}
+                      </div>
+                    )}
                     <p className="text-[clamp(10px,0.9vw,40px)] text-black">
                       {card.user.name}
                     </p>
@@ -189,11 +204,17 @@ export default function FeaturedMarquee() {
                   onClick={() => navigate(`/vendor/${card.user._id}`)}
                   className="px-1 py-6 cursor-pointer"
                 >
-                  <img
-                    src={card.user.profileLogo}
-                    alt="logo"
-                    className="h-16 w-16 mb-2"
-                  />
+                  {typeof card.user.profileLogo === "string" ? (
+                    <img
+                      src={card.user.profileLogo}
+                      alt="Profile Logo"
+                      className="w-16 h-16 aspect-square object-cover"
+                    />
+                  ) : (
+                    <div className="!aspect-square p-2 w-16 h-16 bg-black flex items-center justify-center text-white font-semibold leading-none">
+                      {getInitials(card.user.name)}
+                    </div>
+                  )}
                   <p className="text-[clamp(10px,2.5vw,40px)] sm:text-[clamp(10px,1.5vw,30px)] text-black">
                     {card.user.name}
                   </p>

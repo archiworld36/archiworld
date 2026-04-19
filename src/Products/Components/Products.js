@@ -32,7 +32,7 @@ export default function ProductsPage({ searchTerm }) {
   const [priceRange, setPriceRange] = useState([0, 1000000]);
   const dispatch = useDispatch();
   const { products, total, loading } = useSelector((state) => state.product);
-
+  const top = useRef(null);
   const totalPages = Math.ceil(total / PRODUCTS_PER_PAGE);
   const [searchParams] = useSearchParams();
   const searchParamsString = searchParams.toString();
@@ -66,6 +66,7 @@ export default function ProductsPage({ searchTerm }) {
     navigate,
     searchParamsString, // ✅ SAFE
   ]);
+
   useEffect(() => {
     const payload = {
       page: currentPage,
@@ -95,6 +96,10 @@ export default function ProductsPage({ searchTerm }) {
     if (heightRange[1] !== 200) payload.maxHeight = heightRange[1];
 
     dispatch(fetchProducts(payload));
+    top.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
   }, [
     dispatch,
     currentPage,
@@ -128,6 +133,7 @@ export default function ProductsPage({ searchTerm }) {
     widthRange,
     heightRange,
     searchTerm,
+    sortBy,
   ]);
 
   useEffect(() => {
@@ -276,7 +282,10 @@ export default function ProductsPage({ searchTerm }) {
         )}
 
         {/* ================= RIGHT PRODUCTS ================= */}
-        <div className="px-[2.8vw] lg:px-0 flex-1 overflow-y-auto">
+        <div
+          ref={top}
+          className="px-[2.8vw] lg:px-0 flex-1 overflow-y-auto scroll-mt-[20px]"
+        >
           {/* Top Filter Bar */}
           <div className="flex flex-wrap-reverse lg:flex-nowrap gap-3 lg:justify-between items-center mb-6">
             <div className="flex flex-wrap lg:flex-nowrap w-full justify-between lg:justify-start gap-2 lg:gap-4">

@@ -17,7 +17,14 @@ function ProductData({ productById, setShareOpen }) {
   const [, navigate] = useLocation();
 
   const [activeImage, setActiveImage] = useState(null);
-
+  const getInitials = (fullName) => {
+    if (!fullName) return "";
+    const parts = fullName.trim().split(" ");
+    if (parts.length >= 2) {
+      return parts[0][0].toUpperCase() + parts[1][0].toUpperCase();
+    }
+    return parts[0].substring(0, 2).toUpperCase();
+  };
   useEffect(() => {
     if (productById) {
       setActiveImage(productById.bannerImage);
@@ -153,11 +160,17 @@ function ProductData({ productById, setShareOpen }) {
           onClick={() => navigate(`/vendor/${productById.user?._id}`)}
           className="w-fit cursor-pointer mt-2 flex gap-3 items-center text-[clamp(12px,3vw,40px)] sm:text-[clamp(12px,2.3vw,30px)] lg:text-[clamp(10px,1.2vw,40px)]"
         >
-          <img
-            src={productById.user?.profileLogo}
-            alt=""
-            className="w-16 lg:w-20 h-16 lg:h-20 aspect-square object-cover"
-          />
+          {typeof productById.user?.profileLogo === "string" ? (
+            <img
+              src={productById.user?.profileLogo}
+              alt="Profile Logo"
+              className="w-16 lg:w-20 h-16 lg:h-20 aspect-square object-cover"
+            />
+          ) : (
+            <div className="!aspect-square p-2 w-16 lg:w-20 h-16 lg:h-20 bg-black flex items-center justify-center text-white font-semibold leading-none">
+              {getInitials(productById.user?.name)}
+            </div>
+          )}
           {productById.user?.name}
         </h3>
       </div>

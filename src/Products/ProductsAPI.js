@@ -5,64 +5,14 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 let cancelToken;
 export const fetchProducts = createAsyncThunk(
   "product/fetchProducts",
-  async (
-    {
-      page = 1,
-      limit = 24,
-      search = "",
-      sortBy = "",
-      locations,
-      category,
-      subCategory,
-      subCategories,
-      subSubCategories,
-      brands,
-      materials,
-      colors,
-      minPrice,
-      maxPrice,
-      minLength,
-      maxLength,
-      minWidth,
-      maxWidth,
-      minHeight,
-      maxHeight,
-      minWeight,
-      maxWeight,
-    },
-    thunkAPI,
-  ) => {
+  async (payload, thunkAPI) => {
     try {
       if (cancelToken) {
         cancelToken.cancel("New request initiated, cancelling previous one");
       }
       cancelToken = axios.CancelToken.source();
 
-      const body = {
-        page,
-        limit,
-        search,
-        sortBy,
-        locations,
-        category,
-        subCategory,
-        subCategories,
-        subSubCategories,
-        brands,
-        materials,
-        colors,
-        minPrice,
-        maxPrice,
-        minLength,
-        maxLength,
-        minWidth,
-        maxWidth,
-        minHeight,
-        maxHeight,
-        minWeight,
-        maxWeight,
-      };
-      const response = await axios.post(`${BASEURL}/api/products`, body, {
+      const response = await axios.post(`${BASEURL}/api/products`, payload, {
         cancelToken: cancelToken.token,
       });
 

@@ -1,5 +1,4 @@
 import React from "react";
-import background from "../../assets/AboutUs/Features/background.png";
 function Features() {
   const cards = [
     {
@@ -27,7 +26,9 @@ function Features() {
     <div className="w-full h-full relative">
       <img
         className="w-full h-full absolute lg:relative object-cover"
-        src={background}
+        src={
+          "https://archiworld-files.s3.ap-south-1.amazonaws.com/Website+Images/AboutUsBackground.png"
+        }
         alt=""
       />
 

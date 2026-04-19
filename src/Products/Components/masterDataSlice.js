@@ -38,6 +38,9 @@ const masterDataSlice = createSlice({
         state.categories = action.payload;
         state.loadingCategories = false;
       })
+      .addCase(fetchCategory.rejected, (state, action) => {
+        state.loadingCategories = false;
+      })
       .addCase(fetchSubCategory.pending, (state, action) => {
         state.loadingSubCategories = true;
       })

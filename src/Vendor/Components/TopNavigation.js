@@ -7,7 +7,14 @@ function TopNavigation({ vendor }) {
   const [, navigate] = useLocation();
   const [shareOpen, setShareOpen] = useState(false);
   const phoneNumber = vendor?.mobile?.replace(/\D/g, ""); // remove spaces etc
-
+  const getInitials = (fullName) => {
+    if (!fullName) return "";
+    const parts = fullName.trim().split(" ");
+    if (parts.length >= 2) {
+      return parts[0][0].toUpperCase() + parts[1][0].toUpperCase();
+    }
+    return parts[0].substring(0, 2).toUpperCase();
+  };
   const callNumber = () => {
     window.location.href = `tel:+91${phoneNumber}`;
   };
@@ -29,11 +36,21 @@ function TopNavigation({ vendor }) {
       {/* Top Heading*/}
       <div className="py-[20px] sm:py-[30px] lg:py-[40px] flex flex-col md:flex-row justify-between gap-6 items-center">
         <div className="flex gap-3 items-center w-full">
-          <img
-            src={vendor.profileLogo}
-            alt=""
-            className="w-16 lg:w-20 h-16 lg:h-20 aspect-square object-cover"
-          />
+          {typeof vendor?.profileLogo === "string" ? (
+            <img
+              src={`${vendor?.profileLogo}`}
+              alt="Profile Logo"
+              className="w-16 lg:w-20 h-16 lg:h-20 aspect-square object-cover"
+              onError={(e) => {
+                e.target.src = "/placeholder.png";
+              }}
+            />
+          ) : (
+            <div className="!aspect-square p-2 w-16 lg:w-20 h-16 lg:h-20 bg-black flex items-center justify-center text-white font-semibold leading-none">
+              {getInitials(vendor?.name)}
+            </div>
+          )}
+
           <div>
             <div className="flex gap-8 items-center">
               <h3 className="text-[clamp(12px,3vw,40px)] sm:text-[clamp(10px,1.7vw,30px)] lg:text-[clamp(10px,1.2vw,40px)]">

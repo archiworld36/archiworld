@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from "react";
-import bannerBackground from "../../assets/Homepage/Banner/banner.png";
 import Navbar from "../../Components/Navbar";
 import { useLocation } from "wouter";
 import { useDispatch, useSelector } from "react-redux";
@@ -54,7 +53,9 @@ function Banner() {
   return (
     <div className="relative inset-0 w-full h-full">
       <img
-        src={bannerBackground}
+        src={
+          "https://archiworld-files.s3.ap-south-1.amazonaws.com/Website+Images/HomepageBanner.png"
+        }
         alt=""
         className="relative inset-0 w-full min-h-[55vh] sm:min-h-[75vh] h-fit object-cover -z-10"
       />
