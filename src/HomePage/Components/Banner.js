@@ -26,7 +26,7 @@ function Banner() {
     if (!words.length) return;
 
     const currentWord = words[wordIndex];
-    let typingSpeed = isDeleting ? 40 : 90;
+    let typingSpeed = isDeleting ? 40 : 60;
 
     const timeout = setTimeout(() => {
       if (!isDeleting) {
