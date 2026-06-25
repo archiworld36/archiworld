@@ -65,7 +65,7 @@ function Banner() {
 
         <div className="w-full h-full flex px-3 flex-col gap-3 items-center justify-center text-white">
           <h1 className="text-[clamp(20px,7vw,120px)] sm:text-[clamp(20px,5.6vw,120px)] lg:text-[clamp(20px,4.5vw,120px)] text-center capitalize leading-tight font-medium font-[Poppins]">
-            Your beautiful{" "}
+            Your {" "}
             <span className="relative inline-block px-2">
               <span
                 style={{ fontFamily: "Playfair Display" }}
