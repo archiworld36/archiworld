@@ -3,12 +3,16 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   fetchBrandOptions,
   fetchCategory,
+  fetchFeaturedLogos,
   fetchMaterialOptions,
   fetchSubCategory,
   fetchSubSubCategory,
 } from "./masterDataAPI";
 
 export const initialState = {
+  logos: [],
+  loading: false,
+  error: null,
   brandOptions: [],
   materialOptions: [],
   categories: [],
@@ -62,6 +66,17 @@ const masterDataSlice = createSlice({
       })
       .addCase(fetchSubSubCategory.rejected, (state, action) => {
         state.loadingSubSubCategories = false;
+      })
+      .addCase(fetchFeaturedLogos.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchFeaturedLogos.fulfilled, (state, action) => {
+        state.loading = false;
+        state.logos = action.payload;
+      })
+      .addCase(fetchFeaturedLogos.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });

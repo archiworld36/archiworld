@@ -107,9 +107,7 @@ function ProductData({ productById, setShareOpen }) {
   };
 
   const formatTime = (time) => {
-    if (!Array.isArray(time) || time.length === 0) {
-      return "Not available";
-    }
+    if (!time) return "Not available";
     const [h, m] = time.replace(/\s/g, "").split(":");
     const hour = parseInt(h);
     const suffix = hour >= 12 ? "PM" : "AM";
@@ -143,7 +141,18 @@ function ProductData({ productById, setShareOpen }) {
           </span>{" "}
           {">"}{" "}
           <span
-            onClick={() => navigate("/products")}
+            onClick={() => {
+              const referrer = document.referrer;
+
+              if (
+                referrer &&
+                new URL(referrer).pathname.startsWith("/products")
+              ) {
+                window.history.back();
+              } else {
+                navigate("/products");
+              }
+            }}
             className="cursor-pointer hover:underline"
           >
             Products
@@ -236,7 +245,8 @@ function ProductData({ productById, setShareOpen }) {
                   Price Range{" "}
                 </span>
                 ₹{productById.price?.min.toLocaleString("en-IN")} - ₹
-                {productById.price?.max.toLocaleString("en-IN")}
+                {productById.price?.max.toLocaleString("en-IN")}{" "}
+                {productById?.priceUnit}
               </p>
             </div>
 
@@ -347,25 +357,29 @@ function ProductData({ productById, setShareOpen }) {
                     {productById?.brand?.name}
                   </span>
                 </h2>
-                <h2 className="border-b border-[var(--stroke)] pb-3 flex gap-2 justify-between items-center">
-                  <span className="flex justify-start items-center">
-                    <Dot />
-                    Size (L X W X H)
-                  </span>
-                  <span className="flex justify-start items-center">
-                    {productById.size?.length} X {productById.size?.width} X{" "}
-                    {productById.size?.height} cm
-                  </span>
-                </h2>
-                <h2 className="border-b border-[var(--stroke)] pb-3 flex gap-2 justify-between items-center">
-                  <span className="flex justify-start items-center">
-                    <Dot />
-                    Colors
-                  </span>
-                  <p className="flex justify-start items-center">
-                    {productById?.color?.join(", ")}
-                  </p>
-                </h2>
+                {productById.showSize === true && (
+                  <h2 className="border-b border-[var(--stroke)] pb-3 flex gap-2 justify-between items-center">
+                    <span className="flex justify-start items-center">
+                      <Dot />
+                      Size (L X W X H)
+                    </span>
+                    <span className="flex justify-start items-center">
+                      {productById.size?.length} X {productById.size?.width} X{" "}
+                      {productById.size?.height} mm
+                    </span>
+                  </h2>
+                )}
+                {productById.showColor === true && (
+                  <h2 className="border-b border-[var(--stroke)] pb-3 flex gap-2 justify-between items-center">
+                    <span className="flex justify-start items-center">
+                      <Dot />
+                      Colors
+                    </span>
+                    <p className="flex justify-start items-center">
+                      {productById?.color?.join(", ")}
+                    </p>
+                  </h2>
+                )}
               </div>
             </div>
           </div>

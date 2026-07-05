@@ -1,13 +1,17 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export const FilterSection = ({ title, sectionKey, children }) => {
-  const [openSection, setOpenSection] = useState("categories");
+export const FilterSection = ({ title, sectionKey, children , defaultOpen = false,}) => {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
   const toggleSection = (key) => {
-    setOpenSection((prev) => (prev === key ? null : key));
+    setIsOpen((prev) => (prev === key ? null : key));
   };
-  const isOpen = openSection === sectionKey;
 
+  useEffect(() => {
+    if (defaultOpen) {
+      setIsOpen(true);
+    }
+  }, [defaultOpen]);
   return (
     <div className="border-t border-[var(--stroke)] py-5">
       <h4

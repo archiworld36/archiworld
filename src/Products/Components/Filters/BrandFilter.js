@@ -23,7 +23,7 @@ function BrandFilter({ selectedBrand, setSelectedBrand }) {
     });
   };
   return (
-    <FilterSection title="Brand" sectionKey="brand">
+    <FilterSection title="Brand" sectionKey="brand" defaultOpen={selectedBrand.length > 0}>
       <div className="mt-5 relative">
         <InputText
           type="search"

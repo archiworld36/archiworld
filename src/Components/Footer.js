@@ -1,6 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
 import { FaFacebook, FaInstagram, FaLinkedinIn } from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6";
 import logo from "../assets/Homepage/Banner/logo.png";
 import { useLocation } from "wouter";
 function MenuItem({ label, location }) {
@@ -85,21 +84,17 @@ export default function Footer({ topStat = false }) {
               Social Media
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 items-center">
-              <div className="flex items-center gap-2 cursor-pointer transition">
+              <div onClick={() => window.open("https://www.facebook.com/profile.php?id=61591725445598", "_blank")} className="flex items-center gap-2 cursor-pointer transition">
                 <FaFacebook size={20} />
                 <span>Facebook</span>
               </div>
-              <div className="flex items-center gap-2 cursor-pointer transition">
+              <div onClick={() => window.open("https://www.instagram.com/archiworld_in/?hl=en", "_blank")} className="flex items-center gap-2 cursor-pointer transition">
                 <FaInstagram size={20} />
                 <span>Instagram</span>
               </div>
-              <div className="flex items-center gap-2 cursor-pointer transition">
+              <div onClick={() => window.open("https://www.linkedin.com/company/archiworld/about/", "_blank")} className="flex items-center gap-2 cursor-pointer transition">
                 <FaLinkedinIn size={20} />
                 <span>LinkedIn</span>
-              </div>
-              <div className="flex items-center gap-2 cursor-pointer transition">
-                <FaXTwitter size={20} />
-                <span>Twitter</span>
               </div>
             </div>
           </div>

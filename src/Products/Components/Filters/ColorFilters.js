@@ -13,6 +13,11 @@ function ColorFilters({ selectedColors, setSelectedColors }) {
     { code: "FFF70B", name: "Yellow" },
     { code: "808080", name: "Gray" },
     { code: "FF0000", name: "Red" },
+    { code: "6A5383", name: "Purple" },
+    { code: "895129", name: "Brown" },
+    { code: "EDE8D0", name: "Cream" },
+    { code: "E9D491", name: "Gold" },
+    { code: "CF8F5F", name: "Copper" },
   ];
 
   const handleColorsChange = (colorName) => {
@@ -27,7 +32,7 @@ function ColorFilters({ selectedColors, setSelectedColors }) {
     });
   };
   return (
-    <FilterSection title="Colors" sectionKey="colors">
+    <FilterSection title="Colors" sectionKey="colors" defaultOpen={selectedColors.length > 0}>
       <ul className="space-y-5 pt-5">
         {colors.map((item) => (
           <li key={item.code}>
@@ -35,7 +40,7 @@ function ColorFilters({ selectedColors, setSelectedColors }) {
               onClick={() => handleColorsChange(item.name)}
               className="text-[clamp(10px,3vw,40px)] sm:text-[clamp(12px,1.9vw,30px)] lg:text-[clamp(10px,1vw,40px)] flex justify-between items-center cursor-pointer"
             >
-              <span className="flex gap-2">
+              <span className="flex gap-2 items-center">
                 <div
                   style={{ backgroundColor: `#${item.code}` }}
                   className={`w-5 h-5 p-1 rounded-full overflow-hidden`}

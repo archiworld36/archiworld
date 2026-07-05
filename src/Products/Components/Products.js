@@ -14,45 +14,98 @@ import { useSearchParams } from "wouter";
 const PRODUCTS_PER_PAGE = 24;
 
 export default function ProductsPage({ searchTerm }) {
-  const [currentPage, setCurrentPage] = useState(1);
   const [showFilters, setShowFilters] = useState(true);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [, navigate] = useLocation();
   const [locationArea, setLocationArea] = useState([]);
-  const [sortBy, setSortBy] = useState("");
-  const [selectedLocations, setSelectedLocations] = useState([]);
-  const [selectedSubCategories, setSelectedSubCategories] = useState([]);
-  const [selectedSubSubCategories, setSelectedSubSubCategories] = useState([]);
-  const [selectedColors, setSelectedColors] = useState([]);
-  const [selectedMaterial, setSelectedMaterial] = useState([]);
-  const [selectedBrand, setSelectedBrand] = useState([]);
-  const [lengthRange, setLengthRange] = useState([0, 200]);
-  const [widthRange, setWidthRange] = useState([0, 200]);
-  const [heightRange, setHeightRange] = useState([0, 200]);
-  const [priceRange, setPriceRange] = useState([0, 1000000]);
+  const [searchParams] = useSearchParams();
+
+  const getArrayParam = (key) =>
+    searchParams.get(key)?.split(",").filter(Boolean) || [];
+
+  const getRangeParam = (key, defaultValue) => {
+    const value = searchParams.get(key);
+    if (!value) return defaultValue;
+    const [min, max] = value.split("-").map(Number);
+    return [min, max];
+  };
+
+  const [currentPage, setCurrentPage] = useState(
+    Number(searchParams.get("page")) || 1,
+  );
+
+  const [sortBy, setSortBy] = useState(searchParams.get("sortBy") || "");
+  const [selectedLocations, setSelectedLocations] = useState(
+    getArrayParam("locations"),
+  );
+  const [selectedSubCategories, setSelectedSubCategories] = useState(
+    getArrayParam("subCategories"),
+  );
+  const [selectedSubSubCategories, setSelectedSubSubCategories] = useState(
+    getArrayParam("subSubCategories"),
+  );
+  const [selectedColors, setSelectedColors] = useState(getArrayParam("colors"));
+  const [selectedMaterial, setSelectedMaterial] = useState(
+    getArrayParam("materials"),
+  );
+  const [selectedBrand, setSelectedBrand] = useState(getArrayParam("brands"));
+
+  const [lengthRange, setLengthRange] = useState(
+    getRangeParam("length", [0, 200]),
+  );
+  const [widthRange, setWidthRange] = useState(
+    getRangeParam("width", [0, 200]),
+  );
+  const [heightRange, setHeightRange] = useState(
+    getRangeParam("height", [0, 200]),
+  );
+  const [priceRange, setPriceRange] = useState(
+    getRangeParam("price", [0, 1000000]),
+  );
   const dispatch = useDispatch();
   const { products, total, loading } = useSelector((state) => state.product);
   const top = useRef(null);
   const totalPages = Math.ceil(total / PRODUCTS_PER_PAGE);
-  const [searchParams] = useSearchParams();
-  const searchParamsString = searchParams.toString();
   const currentCategory = searchParams.get("category") || "";
   const currentSubCategory = searchParams.get("subCategory") || "";
-  const isFirstRender = useRef(true);
 
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
-    const paramsObj = new URLSearchParams(searchParamsString);
-    const hasCategory =
-      paramsObj.get("category") || paramsObj.get("subCategory");
-    if (!hasCategory) return;
-    paramsObj.delete("category");
-    paramsObj.delete("subCategory");
-    navigate(`/products${paramsObj.toString()}`);
+    const params = new URLSearchParams(searchParams.toString());
+  
+    params.set("page", currentPage);
+  
+    if (sortBy) params.set("sortBy", sortBy);
+    else params.delete("sortBy");
+  
+    const setArray = (key, value) => {
+      if (value?.length) params.set(key, value.join(","));
+      else params.delete(key);
+    };
+  
+    setArray("locations", selectedLocations);
+    setArray("subCategories", selectedSubCategories);
+    setArray("subSubCategories", selectedSubSubCategories);
+    setArray("brands", selectedBrand);
+    setArray("materials", selectedMaterial);
+    setArray("colors", selectedColors);
+  
+    const setRange = (key, value, defaultValue) => {
+      if (value[0] !== defaultValue[0] || value[1] !== defaultValue[1]) {
+        params.set(key, `${value[0]}-${value[1]}`);
+      } else {
+        params.delete(key);
+      }
+    };
+  
+    setRange("price", priceRange, [0, 1000000]);
+    setRange("length", lengthRange, [0, 200]);
+    setRange("width", widthRange, [0, 200]);
+    setRange("height", heightRange, [0, 200]);
+  
+    navigate(`/products?${params.toString()}`, { replace: true });
   }, [
+    currentPage,
+    sortBy,
     selectedLocations,
     selectedSubCategories,
     selectedSubSubCategories,
@@ -64,7 +117,7 @@ export default function ProductsPage({ searchTerm }) {
     widthRange,
     heightRange,
     navigate,
-    searchParamsString, // ✅ SAFE
+    searchParams
   ]);
 
   useEffect(() => {
@@ -204,7 +257,7 @@ export default function ProductsPage({ searchTerm }) {
       <div className="flex flex-1 relative lg:px-[2vw] pb-10 gap-[2.8vw] lg:gap-[2.2vw]">
         {/* ================= LEFT FILTERS ================= */}
         {showFilters && (
-          <div className="hidden lg:block lg:w-1/4 px-4 sticky h-full max-h-[calc(100vh-0.5rem)] top-2 overscroll-contain overflow-scroll">
+          <div className="hidden lg:block lg:w-1/4 px-4 sticky h-full max-h-[calc(100vh-0.5rem)] top-2 overscroll-contain overflow-scroll scrollbar-visible">
             <Filters
               locationArea={locationArea}
               selectedLocations={selectedLocations}

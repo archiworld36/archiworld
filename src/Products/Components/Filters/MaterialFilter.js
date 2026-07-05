@@ -22,7 +22,7 @@ function MaterialFilter({ selectedMaterial, setSelectedMaterial }) {
     });
   };
   return (
-    <FilterSection title="Material" sectionKey="material">
+    <FilterSection title="Material" sectionKey="material"  defaultOpen={selectedMaterial.length > 0}>
       <div className="mt-5 relative">
         <InputText
           type="search"

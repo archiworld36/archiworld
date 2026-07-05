@@ -64,7 +64,7 @@ function LocationFilter({
   };
 
   return (
-    <FilterSection title="Location" sectionKey="location">
+    <FilterSection title="Location" sectionKey="location" defaultOpen={selectedLocations.length > 0}>
       <div className="mt-5 relative">
         <InputText
           type="search"

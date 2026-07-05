@@ -1,11 +1,8 @@
 import { MapPin } from "lucide-react";
 import React from "react";
-import { useLocation } from "wouter";
 import { SkeletonCard } from "./Skeleton";
 
 function ProductCard({ paginatedProducts, loader = false }) {
-  const [, navigate] = useLocation();
-
   return (
     <>
       {loader
@@ -13,8 +10,8 @@ function ProductCard({ paginatedProducts, loader = false }) {
             <SkeletonCard key={index} />
           ))
         : paginatedProducts.map((product) => (
-            <div
-              onClick={() => navigate(`/products/${product._id}`)}
+            <a
+              href={`/products/${product._id}`}
               key={product._id}
               className="text-black overflow-hidden cursor-pointer shadow-lg rounded-2xl lg:rounded-3xl"
             >
@@ -29,7 +26,7 @@ function ProductCard({ paginatedProducts, loader = false }) {
                     style={{ fontFamily: "Playfair Display" }}
                     className="text-[clamp(10px,2.5vw,40px)] sm:text-[clamp(10px,1.5vw,30px)] lg:text-[clamp(10px,0.9vw,40px)] bg-white w-fit rounded-full px-4 py-1"
                   >
-                    {product?.category?.name}
+                    {product?.brand?.name}
                   </h3>
                 </div>
               </div>
@@ -39,7 +36,8 @@ function ProductCard({ paginatedProducts, loader = false }) {
                   <span className="font-light">Price Range</span>{" "}
                   <span className="font-bold">
                     ₹{product.price?.min?.toLocaleString("en-IN")} - ₹
-                    {product.price?.max?.toLocaleString("en-IN")}
+                    {product.price?.max?.toLocaleString("en-IN")}{" "}
+                    {product?.priceUnit}
                   </span>
                 </p>
                 <h3 className="font-semibold mb-1">{product?.name}</h3>
@@ -48,7 +46,7 @@ function ProductCard({ paginatedProducts, loader = false }) {
                   {product?.user?.city}, {product?.user?.state}
                 </p>
               </div>
-            </div>
+            </a>
           ))}
     </>
   );

@@ -88,11 +88,6 @@ input[type="checkbox"] {
   font-weight: 400;
   overscroll-behavior: none;
 }
-/* Default hidden scrollbar */
-::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-}
 button {
   font-size: clamp(10px, 1.2vw, 40px);
   padding: 0.7vw 3.8vw;
@@ -205,8 +200,8 @@ button {
 
 /* When visible */
 .scrollbar-visible::-webkit-scrollbar {
-  width: 5px;
-  height: 10px;
+  width: 0px;
+  height: 0px;
 }
 
 .scrollbar-visible::-webkit-scrollbar-thumb {

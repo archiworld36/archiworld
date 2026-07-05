@@ -78,3 +78,17 @@ export const fetchSubSubCategory = createAsyncThunk(
     }
   },
 );
+
+export const fetchFeaturedLogos = createAsyncThunk(
+  "masterData/fetchFeaturedLogos",
+  async (_, thunkAPI) => {
+    try {
+      const response = await axios.get(`${BASEURL}/api/get-featured-logos`);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to fetch logos.",
+      );
+    }
+  },
+);
