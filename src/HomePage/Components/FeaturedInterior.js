@@ -125,8 +125,8 @@ export default function FeaturedMarquee() {
                   className="group min-w-[320px] pt-16 transition-all duration-500 relative hover:-translate-y-24"
                 >
                   {/* Card Image */}
-                  <div
-                    onClick={() => navigate(`/products/${card._id}`)}
+                  <a
+                    href={`/products/${card._id}`}
                     className="overflow-hidden relative rounded-3xl cursor-pointer"
                   >
                     <img
@@ -142,14 +142,14 @@ export default function FeaturedMarquee() {
                         {card.name}
                       </h3>
                       <p className="text-[clamp(10px,0.9vw,40px)] line-clamp-1 text-[var(--primary)]">
-                        {card.description}
+                        {card.user.name}
                       </p>
                     </div>
-                  </div>
+                  </a>
 
                   {/* Bottom Info */}
-                  <div
-                    onClick={() => navigate(`/vendor/${card.user._id}`)}
+                  <a
+                    href={`/vendor/${card.user._id}`}
                     className="px-1 py-6 absolute opacity-0 translate-y-full group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 cursor-pointer"
                   >
                     {typeof card.user.profileLogo === "string" ? (
@@ -166,7 +166,7 @@ export default function FeaturedMarquee() {
                     <p className="text-[clamp(10px,0.9vw,40px)] text-black">
                       {card.user.name}
                     </p>
-                  </div>
+                  </a>
                 </div>
               ))}
             </div>
@@ -194,7 +194,7 @@ export default function FeaturedMarquee() {
                       {card.name}
                     </h3>
                     <p className="text-[clamp(10px,2.5vw,40px)] sm:text-[clamp(10px,1.5vw,30px)] line-clamp-1 text-[var(--primary)]">
-                      {card.description}
+                      {card.user.name}
                     </p>
                   </div>
                 </div>

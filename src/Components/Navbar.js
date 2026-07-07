@@ -42,20 +42,21 @@ function Navbar({ color, searchKey }) {
     <div
       className={`w-full h-[70px] ${open || search ? "fixed z-20" : "relative"} lg:h-[6vw] px-[3vw] lg:px-[2.34375vw] pt-[20px] flex gap-[1.5625vw]`}
     >
-      <img
-        src={
-          color === "black"
-            ? open
-              ? logo
-              : logoBlack
-            : search
-              ? logoBlack
-              : logo
-        }
-        alt=""
-        onClick={() => navigate("/")}
-        className={`w-fit h-full z-50 relative cursor-pointer`}
-      />
+      <a href={"/"}>
+        <img
+          src={
+            color === "black"
+              ? open
+                ? logo
+                : logoBlack
+              : search
+                ? logoBlack
+                : logo
+          }
+          alt=""
+          className={`w-fit h-full z-50 relative cursor-pointer`}
+        />
+      </a>
       <div
         className={`w-full h-full bg-gray-400 bg-opacity-15 rounded-[43px] p-[0.6vw] border border-white hidden lg:flex gap-[1vw] backdrop-blur-md`}
       >

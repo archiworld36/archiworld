@@ -1,4 +1,4 @@
-import { MapPin } from "lucide-react";
+import { User2 } from "lucide-react";
 import React from "react";
 import { SkeletonCard } from "./Skeleton";
 
@@ -26,7 +26,7 @@ function ProductCard({ paginatedProducts, loader = false }) {
                     style={{ fontFamily: "Playfair Display" }}
                     className="text-[clamp(10px,2.5vw,40px)] sm:text-[clamp(10px,1.5vw,30px)] lg:text-[clamp(10px,0.9vw,40px)] bg-white w-fit rounded-full px-4 py-1"
                   >
-                    {product?.brand?.name}
+                    {product?.category?.name}
                   </h3>
                 </div>
               </div>
@@ -42,8 +42,8 @@ function ProductCard({ paginatedProducts, loader = false }) {
                 </p>
                 <h3 className="font-semibold mb-1">{product?.name}</h3>
                 <p className="text-[var(--secondary)] flex gap-1 items-center">
-                  <MapPin className="w-4 h-4" />
-                  {product?.user?.city}, {product?.user?.state}
+                  <User2 className="w-4 h-4" />
+                  {product?.brand?.name}
                 </p>
               </div>
             </a>
